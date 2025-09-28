@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 @Service
 @AllArgsConstructor
 public class UserService implements IUserService {
+    /** Service for handling user registration operations. */
     private final IRegisterUserService registerUserService;
+
     /**
      * Creates a new user based on the provided registration details.
      *

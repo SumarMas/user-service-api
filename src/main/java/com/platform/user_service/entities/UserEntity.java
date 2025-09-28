@@ -19,6 +19,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Entity representing a user in the system.
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
@@ -27,26 +30,41 @@ import java.util.UUID;
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(name = "uk_users_email", columnNames = "email"))
 public class UserEntity extends AuditEntity {
+    /**
+     * Unique identifier for the user.
+     */
     @Id
     @Column(name = "user_id", nullable = false, length = 36)
     private UUID id;
-
+    /**
+     * First name of the user.
+     */
     @Column(name = "first_name", nullable = false, length = 100)
     private String firstName;
-
+    /**
+     * Last name of the user.
+      */
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
-
+    /**
+     * Email address of the user.
+     */
     @Column(name = "email", nullable = false, length = 255)
     private String email;
-
+    /**
+     * Image profile.
+     */
     @Column(name = "profile_file_id", length = 36)
     private UUID profileFileId; // handled by media-service
-
+    /**
+     * Status of the user account.
+     */
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus status; // active, inactive, blocked
-
+    /**
+     * Roles assigned to the user.
+     */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRoleEntity> userRoles;
 }

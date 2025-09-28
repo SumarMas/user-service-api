@@ -24,19 +24,33 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "user_roles")
-public class UserRoleEntity extends AuditEntity{
+public class UserRoleEntity extends AuditEntity {
+    /**
+     * Composite primary key consisting of user ID and role.
+     */
     @EmbeddedId
     private UserRolId id;
 
+    /**
+     * The user associated with this role.
+     */
     @ManyToOne()
     @MapsId("userId") // enlaza el campo userId de UserRolId
     @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
-
+    /**
+     * Gets the role from the composite key.
+     *
+     * @return The role.
+     */
     public UserRole getRol() {
         return id != null ? id.getRol() : null;
     }
-
+    /**
+     * Sets the role in the composite key.
+     *
+     * @param rol The role to set.
+     */
     public void setRol(UserRole rol) {
         if (id == null) {
             id = new UserRolId();

@@ -18,14 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController {
-    /** Service for handling user-related operations. */
+    /**
+     * Service for handling user-related operations.
+     */
     private final IUserService userService;
 
     /**
      * Handles user registration requests.
      *
      * @param user the user registration details
-     * @return a ResponseEntity containing the TokenResponseDto with the generated JWT token
+     * @return a ResponseEntity containing the TokenResponseDto
+     * with the generated JWT token
      */
     @PostMapping("/register")
     public ResponseEntity<TokenResponseDto> registerUser(@RequestBody @Valid UserRegisterDto user) {

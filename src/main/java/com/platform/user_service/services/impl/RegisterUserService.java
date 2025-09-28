@@ -24,17 +24,21 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Implementation of the IRegisterUserService interface for user registration operations.
+ * Implementation of the IRegisterUserService
+ * interface for user registration operations.
  */
 @Service
 @AllArgsConstructor
 public class RegisterUserService implements IRegisterUserService {
 
+    /** Logger for logging information and errors. */
     private static final Logger LOGGER = LoggerFactory.getLogger(RegisterUserService.class);
-
+    /** REST client for interacting with the authentication service. */
     private final IAuthRestClient authRestClient;
+    /** Repository for accessing user data. */
     private final UserRepository userRepository;
-    private final UserRole defaultRole = UserRole.DONOR;
+    /** The default role assigned to newly registered users. */
+    private static final  UserRole DEFAULT_ROLE = UserRole.DONOR;
 
     /**
      * Registers a new user based on the provided registration details.
@@ -57,11 +61,12 @@ public class RegisterUserService implements IRegisterUserService {
         LOGGER.trace("User role entity built: {}", userRoleEntity);
         userRepository.save(userEntity);
         userRepository.flush();
-        //Todo: Remove userEntity flush and implement a more robust rollback mechanism if auth service registration fails
+        //Todo: Remove userEntity flush and implement a more robust
+        // rollback mechanism if auth service registration fails
         LOGGER.trace("User entity saved: {}", userEntity);
         RegisterAuthDto registerAuthDto = buildRegisterAuthDto(registerUserDto, userEntity.getId());
-        TokenResponseDto token= registerInAuthService(registerAuthDto);
-        if(token==null){
+        TokenResponseDto token = registerInAuthService(registerAuthDto);
+        if (token == null) {
             LOGGER.error("In registerUser method, token is null; rolling back user creation");
             throw new CustomException("Error registering user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -91,7 +96,7 @@ public class RegisterUserService implements IRegisterUserService {
     private UserRoleEntity buildUserRoleEntity(UserEntity userEntity) {
         LOGGER.trace("In buildUserRoleEntity method");
         return UserRoleEntity.builder()
-                .id(new UserRolId(userEntity.getId(), defaultRole))
+                .id(new UserRolId(userEntity.getId(), DEFAULT_ROLE))
                 .user(userEntity)
                 .build();
     }
@@ -102,7 +107,7 @@ public class RegisterUserService implements IRegisterUserService {
                 .userId(userId)
                 .username(registerUserDto.getUsername())
                 .password(registerUserDto.getPassword())
-                .defaultRole(defaultRole.toString())
+                .defaultRole(DEFAULT_ROLE.toString())
                 .build();
     }
 

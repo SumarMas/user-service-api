@@ -31,27 +31,48 @@ import java.util.UUID;
 @Entity
 @Table(name = "ngos")
 public class NgoEntity extends AuditEntity {
+    /**
+     * Unique identifier for the NGO.
+     */
     @Id
     @Column(name = "ngo_id", nullable = false, length = 36)
     private UUID id;
 
+    /**
+     * The user who created the NGO entry.
+     */
     @OneToOne
     @JoinColumn(name = "user_id_creator", nullable = false)
     private UserEntity userIdCreator;
 
+    /**
+     * Name of the NGO.
+     */
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
+    /**
+     * Description of the NGO.
+     */
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+    /**
+     * Image profile.
+     */
     @Column(name = "profile_file_id", length = 36)
     private UUID profileFileId; // handled by media-service
 
+    /**
+     * Verification status of the NGO.
+     */
     @Column(name = "verification_status", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private NgoStatus verificationStatus; // UNVERIFIED, PENDING, VERIFIED, DENIED
 
+    /**
+     * Documents submitted by the NGO for validation.
+     */
     @OneToMany(mappedBy = "ngo", cascade = CascadeType.ALL)
     private List<NgoDocument> ngoDocuments;
 }

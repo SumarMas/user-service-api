@@ -2,10 +2,10 @@ name: Gitflow Guard
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, ready_for_review]
-    branches: [develop, master, main, 'release/*']
+    types: [ opened, reopened, synchronize, ready_for_review ]
+    branches: [ develop, master, main, 'release/*' ]
   push:
-    branches-ignore:   # Ignora pushes en ramas protegidas
+    branches-ignore: # Ignora pushes en ramas protegidas
       - develop
       - master
       - main
