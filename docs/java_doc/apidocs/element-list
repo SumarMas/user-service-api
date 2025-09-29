@@ -1,0 +1,15 @@
+com.platform.user_service
+com.platform.user_service.configs
+com.platform.user_service.controllers
+com.platform.user_service.controllers.manageExceptions
+com.platform.user_service.dtos.common
+com.platform.user_service.dtos.request
+com.platform.user_service.dtos.response
+com.platform.user_service.entities
+com.platform.user_service.entities.embeddable
+com.platform.user_service.enums
+com.platform.user_service.repositories
+com.platform.user_service.restClients
+com.platform.user_service.restClients.impl
+com.platform.user_service.services
+com.platform.user_service.services.impl
