@@ -2,6 +2,7 @@ package com.platform.user_service.services;
 
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
+import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,4 +17,12 @@ public interface IUserService {
      * @return a TokenResponseDto containing the generated JWT token
      */
     TokenResponseDto crateUser(UserRegisterDto user);
+
+    /**
+     * Retrieves user login data based on the provided user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserLoginResponseDto containing user id and roles
+     */
+    UserLoginResponseDto getDataLogin(String userId);
 }
