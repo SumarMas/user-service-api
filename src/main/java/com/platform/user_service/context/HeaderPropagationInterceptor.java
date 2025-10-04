@@ -1,5 +1,6 @@
 package com.platform.user_service.context;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
@@ -12,6 +13,7 @@ import java.io.IOException;
  * to outgoing HTTP requests made by RestTemplate or other HTTP clients.
  */
 @Component
+@AllArgsConstructor
 public class HeaderPropagationInterceptor implements ClientHttpRequestInterceptor {
 
     /** Intercepts HTTP requests to propagate headers from the RequestContext. */

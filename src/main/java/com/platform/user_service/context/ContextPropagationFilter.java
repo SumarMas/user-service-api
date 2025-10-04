@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,9 +15,11 @@ import java.io.IOException;
  * and stores it in a ThreadLocal variable for the duration of the request.
  */
 @Component
+@AllArgsConstructor
 public class ContextPropagationFilter extends OncePerRequestFilter {
 
-    /** Extracts context information from HTTP headers and sets it in RequestContext. */
+    /** Extracts context information from
+     * HTTP headers and sets it in RequestContext. */
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,

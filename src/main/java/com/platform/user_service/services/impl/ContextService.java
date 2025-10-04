@@ -3,6 +3,7 @@ package com.platform.user_service.services.impl;
 import com.platform.user_service.context.RequestContext;
 import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.services.IContextService;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
  * ContextService is responsible for handling user context related operations.
  */
 @Service
+@AllArgsConstructor
 public class ContextService implements IContextService {
     /**
      * validate if the userId is the same as the one in the context.
