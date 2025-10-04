@@ -90,6 +90,7 @@ public class RegisterUserService implements IRegisterUserService {
                 .email(registerUserDto.getEmail())
                 .status(UserStatus.ACTIVE)
                 .userRoles(new ArrayList<>())
+                .enabled(true)
                 .build();
     }
 

@@ -7,6 +7,7 @@ import jakarta.persistence.PreUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @MappedSuperclass
+@SuperBuilder
 public abstract class AuditEntity {
 
     /**
@@ -53,7 +55,7 @@ public abstract class AuditEntity {
      * This field is not insertable but is updatable.
      */
     @Column(name = "enabled", insertable = false, updatable = true)
-    private Boolean enabled;
+    private Boolean enabled = true;
 
     /**
      * Lifecycle callback to set creation and update timestamps before persisting.
