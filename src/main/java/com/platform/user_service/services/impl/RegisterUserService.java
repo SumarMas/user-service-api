@@ -83,14 +83,17 @@ public class RegisterUserService implements IRegisterUserService {
 
     private UserEntity buildUserEntity(UserRegisterDto registerUserDto) {
         LOGGER.trace("In buildUserEntity method");
+        UUID userId = UUID.randomUUID();
         return UserEntity.builder()
-                .id(UUID.randomUUID())
+                .id(userId)
                 .firstName(registerUserDto.getFirstName())
                 .lastName(registerUserDto.getLastName())
                 .email(registerUserDto.getEmail())
                 .status(UserStatus.ACTIVE)
                 .profileFileId(parseProfileFileId(registerUserDto.getProfileFileId()))
                 .userRoles(new ArrayList<>())
+                .createdUser(userId)
+                .lastUpdatedUser(userId)
                 .enabled(true)
                 .build();
     }

@@ -56,22 +56,4 @@ public abstract class AuditEntity {
      */
     @Column(name = "enabled", insertable = false, updatable = true)
     private Boolean enabled = true;
-
-    /**
-     * Lifecycle callback to set creation and update timestamps before persisting.
-     */
-    @PrePersist
-    void onCreate() {
-        var now = LocalDateTime.now();
-        this.createdDatetime = now;
-        this.lastUpdatedDatetime = now;
-    }
-
-    /**
-     * Lifecycle callback to update the last updated timestamp before updating.
-     */
-    @PreUpdate
-    void onUpdate() {
-        this.lastUpdatedDatetime = LocalDateTime.now();
-    }
 }
