@@ -1,5 +1,6 @@
 com.platform.user_service
 com.platform.user_service.configs
+com.platform.user_service.context
 com.platform.user_service.controllers
 com.platform.user_service.controllers.manageExceptions
 com.platform.user_service.dtos.common
