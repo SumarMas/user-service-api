@@ -1,6 +1,5 @@
 package com.platform.user_service.services.impl;
 
-import com.platform.user_service.context.RequestContext;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.entities.UserEntity;
@@ -17,7 +16,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 /**
- * Implementation of the IUpdateUserService interface for updating user information.
+ * Implementation of the IUpdateUserService
+ * interface for updating user information.
  */
 @Service
 @AllArgsConstructor

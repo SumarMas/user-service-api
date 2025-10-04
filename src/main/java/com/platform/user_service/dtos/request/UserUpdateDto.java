@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object for updating user information.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
