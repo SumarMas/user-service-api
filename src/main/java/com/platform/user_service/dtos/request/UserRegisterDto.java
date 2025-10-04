@@ -53,4 +53,10 @@ public class UserRegisterDto {
     @Size(min = 8, max = 32, message = "password must be between 6 and 32 characters")
     @JsonProperty("password")
     private String password;
+
+    /**
+     * The profile file ID of the user.
+     */
+    @JsonProperty("profileFileId")
+    private String profileFileId;
 }
