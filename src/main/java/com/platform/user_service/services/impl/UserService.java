@@ -1,13 +1,17 @@
 package com.platform.user_service.services.impl;
 
 import com.platform.user_service.dtos.request.UserRegisterDto;
+import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import com.platform.user_service.services.IGetUserService;
 import com.platform.user_service.services.IRegisterUserService;
+import com.platform.user_service.services.IUpdateUserService;
 import com.platform.user_service.services.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * Implementation of the IUserService interface for user-related operations.
@@ -19,6 +23,8 @@ public class UserService implements IUserService {
     private final IRegisterUserService registerUserService;
     /** Service for handling get user information operations.*/
     private final IGetUserService getUserService;
+    /** Service for handling user update operations. */
+    private final IUpdateUserService updateUserService;
 
     /**
      * Creates a new user based on the provided registration details.
@@ -40,5 +46,16 @@ public class UserService implements IUserService {
     @Override
     public UserLoginResponseDto getDataLogin(String userId) {
         return getUserService.getDataLoginUser(userId);
+    }
+
+    /**
+     * Updates the user information based on the provided user ID and update data.
+     *
+     * @param userId        The UUID of the user to be updated.
+     * @param userUpdateDto The DTO containing the updated user information.
+     */
+    @Override
+    public void updateUser(UUID userId, UserUpdateDto userUpdateDto) {
+        updateUserService.updateUser(userId, userUpdateDto);
     }
 }
