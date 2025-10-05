@@ -1,6 +1,20 @@
 spring:
   application:
     name: user-service
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/user_service}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    defer-datasource-initialization: true
 
 server:
   port: 8082
@@ -19,13 +33,14 @@ management:
   tracing:
     sampling:
       probability: 1.0
+    baggage:
+      remote-fields:
+        - X-Request-Id
   zipkin:
     tracing:
-      endpoint: http://localhost:9411/api/v2/spans
+      endpoint: ${ZIPKIN_SERVER:http://localhost:9411/api/v2/spans}
 
 logging:
-  pattern:
-    level: "%5p [traceId=%X{traceId:-}, spanId=%X{spanId:-}]"
   level:
     root: INFO
     org.springframework.security: INFO
@@ -38,4 +53,4 @@ eureka:
 
 pool:
   auth:
-    url: ${AUTH_SERVICE_URL:http://AUTH-SERVICE}
+    url: ${AUTH_SERVICE_URL:http://localhost:8080/auth}

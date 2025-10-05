@@ -1,142 +1,142 @@
+-- ================================================
+-- USER SERVICE SCHEMA (MySQL adjusted with safety checks)
+-- ================================================
+CREATE DATABASE IF NOT EXISTS user_service;
+USE user_service;
+
 -- =========================================================
 -- USERS
 -- =========================================================
-CREATE TABLE users
-(
-    user_id               BINARY(16) PRIMARY KEY,
-    first_name            VARCHAR(100)        NOT NULL,
-    last_name             VARCHAR(100)        NOT NULL,
-    email                 VARCHAR(255) UNIQUE NOT NULL,
-    profile_file_id       BINARY(16),
-    status                VARCHAR(20)         NOT NULL, -- ACTIVE, INACTIVE, BLOCKED
-    created_datetime      DATETIME            NOT NULL,
-    created_user          BINARY(16) NOT NULL,
-    last_updated_datetime DATETIME            NOT NULL,
-    last_updated_user     BINARY(16) NOT NULL,
-    enabled               BOOLEAN DEFAULT TRUE
+CREATE TABLE IF NOT EXISTS users (
+                       user_id BINARY(16) PRIMARY KEY,
+                       first_name VARCHAR(100) NOT NULL,
+                       last_name VARCHAR(100) NOT NULL,
+                       email VARCHAR(255) UNIQUE NOT NULL,
+                       profile_file_id BINARY(16),
+                       status VARCHAR(20) NOT NULL,
+                       created_datetime DATETIME NOT NULL,
+                       created_user BINARY(16) NOT NULL,
+                       last_updated_datetime DATETIME NOT NULL,
+                       last_updated_user BINARY(16) NOT NULL,
+                       enabled BOOLEAN DEFAULT TRUE
 );
 
-CREATE TABLE users_audit
-(
-    user_id               BINARY(16) NOT NULL,
-    version               INT NOT NULL,
-    first_name            VARCHAR(100),
-    last_name             VARCHAR(100),
-    email                 VARCHAR(255),
-    profile_file_id       BINARY(16),
-    status                VARCHAR(20),
-    created_datetime      DATETIME,
-    created_user          BINARY(16),
-    last_updated_datetime DATETIME,
-    last_updated_user     BINARY(16),
-    enabled               BOOLEAN,
-    PRIMARY KEY (user_id, version)
+CREATE TABLE IF NOT EXISTS users_audit (
+                             user_id BINARY(16) NOT NULL,
+                             version INT NOT NULL,
+                             first_name VARCHAR(100),
+                             last_name VARCHAR(100),
+                             email VARCHAR(255),
+                             profile_file_id BINARY(16),
+                             status VARCHAR(20),
+                             created_datetime DATETIME,
+                             created_user BINARY(16),
+                             last_updated_datetime DATETIME,
+                             last_updated_user BINARY(16),
+                             enabled BOOLEAN,
+                             PRIMARY KEY (user_id , version)
 );
 
 -- =========================================================
 -- USER_ROLES
 -- =========================================================
-CREATE TABLE user_roles
-(
-    user_id               BINARY(16) NOT NULL,
-    role                  VARCHAR(50) NOT NULL, -- ADMIN, DONOR, ORGANIZATION
-    created_datetime      DATETIME    NOT NULL,
-    created_user          BINARY(16) NOT NULL,
-    last_updated_datetime DATETIME    NOT NULL,
-    last_updated_user     BINARY(16) NOT NULL,
-    enabled               BOOLEAN DEFAULT TRUE,
-    PRIMARY KEY (user_id, role),
-    FOREIGN KEY (user_id) REFERENCES users (user_id)
+CREATE TABLE IF NOT EXISTS user_roles (
+                            user_id BINARY(16) NOT NULL,
+                            role VARCHAR(50) NOT NULL,
+                            created_datetime DATETIME NOT NULL,
+                            created_user BINARY(16) NOT NULL,
+                            last_updated_datetime DATETIME NOT NULL,
+                            last_updated_user BINARY(16) NOT NULL,
+                            enabled BOOLEAN DEFAULT TRUE,
+                            PRIMARY KEY (user_id , role),
+                            FOREIGN KEY (user_id)
+                                REFERENCES users (user_id)
 );
 
-CREATE TABLE user_roles_audit
-(
-    user_id               BINARY(16) NOT NULL,
-    role                  VARCHAR(50) NOT NULL,
-    version               INT         NOT NULL,
-    created_datetime      DATETIME,
-    created_user          BINARY(16),
-    last_updated_datetime DATETIME,
-    last_updated_user     BINARY(16),
-    enabled               BOOLEAN,
-    PRIMARY KEY (user_id, role, version)
+CREATE TABLE IF NOT EXISTS user_roles_audit (
+                                  user_id BINARY(16) NOT NULL,
+                                  role VARCHAR(50) NOT NULL,
+                                  version INT NOT NULL,
+                                  created_datetime DATETIME,
+                                  created_user BINARY(16),
+                                  last_updated_datetime DATETIME,
+                                  last_updated_user BINARY(16),
+                                  enabled BOOLEAN,
+                                  PRIMARY KEY (user_id , role , version)
 );
 
 -- =========================================================
 -- NGOS
 -- =========================================================
-CREATE TABLE ngos
-(
-    ngo_id                BINARY(16) PRIMARY KEY,
-    user_id_creator       BINARY(16) NOT NULL,
-    name                  VARCHAR(255) NOT NULL,
-    description           TEXT,
-    profile_file_id       BINARY(16),
-    verification_status   VARCHAR(20)  NOT NULL, -- UNVERIFIED, PENDING, VERIFIED, DENIED
-    created_datetime      DATETIME     NOT NULL,
-    created_user          BINARY(16) NOT NULL,
-    last_updated_datetime DATETIME     NOT NULL,
-    last_updated_user     BINARY(16) NOT NULL,
-    enabled               BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id_creator) REFERENCES users (user_id)
+CREATE TABLE IF NOT EXISTS ngos (
+                      ngo_id BINARY(16) PRIMARY KEY,
+                      user_id_creator BINARY(16) NOT NULL,
+                      name VARCHAR(255) NOT NULL,
+                      description TEXT,
+                      profile_file_id BINARY(16),
+                      verification_status VARCHAR(20) NOT NULL,
+                      created_datetime DATETIME NOT NULL,
+                      created_user BINARY(16) NOT NULL,
+                      last_updated_datetime DATETIME NOT NULL,
+                      last_updated_user BINARY(16) NOT NULL,
+                      enabled BOOLEAN DEFAULT TRUE,
+                      FOREIGN KEY (user_id_creator)
+                          REFERENCES users (user_id)
 );
 
-CREATE TABLE ngos_audit
-(
-    ngo_id                BINARY(16) NOT NULL,
-    version               INT NOT NULL,
-    user_id_creator       BINARY(16),
-    name                  VARCHAR(255),
-    description           TEXT,
-    profile_file_id       BINARY(16),
-    verification_status   VARCHAR(20),
-    created_datetime      DATETIME,
-    created_user          BINARY(16),
-    last_updated_datetime DATETIME,
-    last_updated_user     BINARY(16),
-    enabled               BOOLEAN,
-    PRIMARY KEY (ngo_id, version)
+CREATE TABLE IF NOT EXISTS ngos_audit (
+                            ngo_id BINARY(16) NOT NULL,
+                            version INT NOT NULL,
+                            user_id_creator BINARY(16),
+                            name VARCHAR(255),
+                            description TEXT,
+                            profile_file_id BINARY(16),
+                            verification_status VARCHAR(20),
+                            created_datetime DATETIME,
+                            created_user BINARY(16),
+                            last_updated_datetime DATETIME,
+                            last_updated_user BINARY(16),
+                            enabled BOOLEAN,
+                            PRIMARY KEY (ngo_id , version)
 );
 
 -- =========================================================
 -- NGO_DOCUMENTS
 -- =========================================================
-CREATE TABLE ngo_documents
-(
-    document_id           BINARY(16) PRIMARY KEY,
-    ngo_id                BINARY(16) NOT NULL,
-    file_id               BINARY(16) NOT NULL,
-    status                VARCHAR(20) NOT NULL, -- RECEIVED, ACCEPTED, REJECTED
-    admin_comment         TEXT,
-    created_datetime      DATETIME    NOT NULL,
-    created_user          BINARY(16) NOT NULL,
-    last_updated_datetime DATETIME    NOT NULL,
-    last_updated_user     BINARY(16) NOT NULL,
-    enabled               BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (ngo_id) REFERENCES ngos (ngo_id)
+CREATE TABLE IF NOT EXISTS ngo_documents (
+                               document_id BINARY(16) PRIMARY KEY,
+                               ngo_id BINARY(16) NOT NULL,
+                               file_id BINARY(16) NOT NULL,
+                               status VARCHAR(20) NOT NULL,
+                               admin_comment TEXT,
+                               created_datetime DATETIME NOT NULL,
+                               created_user BINARY(16) NOT NULL,
+                               last_updated_datetime DATETIME NOT NULL,
+                               last_updated_user BINARY(16) NOT NULL,
+                               enabled BOOLEAN DEFAULT TRUE,
+                               FOREIGN KEY (ngo_id)
+                                   REFERENCES ngos (ngo_id)
 );
 
-CREATE TABLE ngo_documents_audit
-(
-    document_id           BINARY(16) NOT NULL,
-    version               INT NOT NULL,
-    ngo_id                BINARY(16),
-    file_id               BINARY(16),
-    status                VARCHAR(20),
-    admin_comment         TEXT,
-    created_datetime      DATETIME,
-    created_user          BINARY(16),
-    last_updated_datetime DATETIME,
-    last_updated_user     BINARY(16),
-    enabled               BOOLEAN,
-    PRIMARY KEY (document_id, version)
+CREATE TABLE IF NOT EXISTS ngo_documents_audit (
+                                     document_id BINARY(16) NOT NULL,
+                                     version INT NOT NULL,
+                                     ngo_id BINARY(16),
+                                     file_id BINARY(16),
+                                     status VARCHAR(20),
+                                     admin_comment TEXT,
+                                     created_datetime DATETIME,
+                                     created_user BINARY(16),
+                                     last_updated_datetime DATETIME,
+                                     last_updated_user BINARY(16),
+                                     enabled BOOLEAN,
+                                     PRIMARY KEY (document_id , version)
 );
 
 -- =========================================================
 -- TRIGGERS
 -- =========================================================
-DELIMITER
-$$
+DELIMITER $$
 
 -- Users
 CREATE TRIGGER before_insert_users
