@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -38,11 +39,14 @@ public class ContextPropagationFilter extends OncePerRequestFilter {
         );
 
         RequestContext.setCurrentContext(context);
-
+        if (requestId != null) {
+            MDC.put("X-Request-Id", requestId);
+        }
         try {
             filterChain.doFilter(request, response);
         } finally {
             RequestContext.clear();
+            MDC.clear();
         }
     }
 }

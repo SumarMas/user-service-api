@@ -100,8 +100,11 @@ public class RegisterUserService implements IRegisterUserService {
 
     private UserRoleEntity buildUserRoleEntity(UserEntity userEntity) {
         LOGGER.trace("In buildUserRoleEntity method");
+        final UUID userId = userEntity.getId();
         return UserRoleEntity.builder()
-                .id(new UserRolId(userEntity.getId(), DEFAULT_ROLE))
+                .id(new UserRolId(userId, DEFAULT_ROLE))
+                .createdUser(userId)
+                .lastUpdatedUser(userId)
                 .user(userEntity)
                 .build();
     }

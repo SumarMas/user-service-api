@@ -25,7 +25,6 @@ public class RestTemplateConfig {
      * @return a RestTemplate instance with the specified timeout settings
      */
     @Bean
-    @LoadBalanced
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
                 .setConnectTimeout(Duration.ofMillis(TIMEOUT))

@@ -31,7 +31,7 @@ public class UserRolId implements Serializable {
     /**
      * Role assigned to the user.
      */
-    @Column(name = "rol", nullable = false)
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole rol;
 
