@@ -14,3 +14,5 @@ com.platform.user_service.restClients
 com.platform.user_service.restClients.impl
 com.platform.user_service.services
 com.platform.user_service.services.impl
+com.platform.user_service.services.Ngo
+com.platform.user_service.services.Ngo.Impl
