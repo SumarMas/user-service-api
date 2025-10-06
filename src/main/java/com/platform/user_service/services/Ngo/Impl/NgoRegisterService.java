@@ -43,7 +43,7 @@ public class NgoRegisterService implements INgoRegisterService {
      */
     @Override
     @Transactional
-    public void RegisterNgo(NgoCreateRequestDto ngoCreateRequestDto) {
+    public void registerNgo(NgoCreateRequestDto ngoCreateRequestDto) {
         try {
             LOGGER.trace("NgoCreateRequestDto={}", ngoCreateRequestDto);
             UUID userId = getCurrentUserId();
@@ -56,9 +56,9 @@ public class NgoRegisterService implements INgoRegisterService {
             LOGGER.trace("NgoEntity={}", ngoEntity);
             ngoRepository.save(ngoEntity);
             LOGGER.info("NGO with ID {} successfully registered by user {}", ngoEntity.getId(), userId);
-        } catch (DataAccessException ex){
+        } catch (DataAccessException ex) {
             LOGGER.error("Database error occurred while registering NGO: {}", ex.getMessage());
-            throw new CustomException("An error occurred when try save NGO", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("An error occurred when try save NGO", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 
@@ -72,7 +72,7 @@ public class NgoRegisterService implements INgoRegisterService {
     }
 
     private void validateUserHasNgo(UUID userId) {
-        if (ngoRepository.existsByUserIdCreator_Id(userId)) {
+        if (ngoRepository.existsByUserIdCreatorId(userId)) {
             LOGGER.warn("User with ID {} already has an NGO", userId);
             throw new CustomException("User already has an NGO", HttpStatus.BAD_REQUEST);
         }
@@ -138,7 +138,7 @@ public class NgoRegisterService implements INgoRegisterService {
             return UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             LOGGER.warn("Invalid UUID format for {}: {}", fieldName, id);
-            throw new CustomException("Invalid UUID format for " + fieldName, HttpStatus.BAD_REQUEST);
+            throw new CustomException("Invalid UUID format for " + fieldName, HttpStatus.BAD_REQUEST, e);
         }
     }
 }

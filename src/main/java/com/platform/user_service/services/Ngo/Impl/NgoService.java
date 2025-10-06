@@ -28,6 +28,6 @@ public class NgoService implements INgoService {
     @Override
     public void registerNgo(NgoCreateRequestDto ngoCreateRequestDto) {
         LOG.trace("In RegisterNgo");
-        ngoRegisterService.RegisterNgo(ngoCreateRequestDto);
+        ngoRegisterService.registerNgo(ngoCreateRequestDto);
     }
 }

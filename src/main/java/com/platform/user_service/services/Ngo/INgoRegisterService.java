@@ -12,5 +12,5 @@ public interface INgoRegisterService {
      *
      * @param ngoCreateRequestDto The DTO containing NGO creation details.
      */
-    void RegisterNgo(NgoCreateRequestDto ngoCreateRequestDto);
+    void registerNgo(NgoCreateRequestDto ngoCreateRequestDto);
 }

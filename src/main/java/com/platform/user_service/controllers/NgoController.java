@@ -26,7 +26,8 @@ public class NgoController {
      * Handles NGO registration requests.
      *
      * @param ngoCreateRequestDto the NGO creation details
-     * @return a ResponseEntity with HTTP status 200 (OK) if the registration is successful
+     * @return a ResponseEntity with HTTP status 200 (OK)
+     * if the registration is successful
      */
     @PostMapping("/register")
     public ResponseEntity<Void> registerNgo(@RequestBody @Valid NgoCreateRequestDto ngoCreateRequestDto) {
