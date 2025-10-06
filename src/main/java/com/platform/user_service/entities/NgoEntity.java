@@ -12,10 +12,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +27,7 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 @Table(name = "ngos")
 public class NgoEntity extends AuditEntity {
@@ -62,6 +62,11 @@ public class NgoEntity extends AuditEntity {
      */
     @Column(name = "profile_file_id", length = 36)
     private UUID profileFileId; // handled by media-service
+    /**
+     * Image banner.
+     */
+    @Column(name = "banner_file_id", length = 36)
+    private UUID bannerFileId; // handled by media-service
 
     /**
      * Verification status of the NGO.
@@ -75,4 +80,10 @@ public class NgoEntity extends AuditEntity {
      */
     @OneToMany(mappedBy = "ngo", cascade = CascadeType.ALL)
     private List<NgoDocument> ngoDocuments;
+
+    /**
+     * Images associated with the NGO.
+     */
+    @OneToMany(mappedBy = "ngo", cascade = CascadeType.ALL)
+    private List<NgoImageEntity> ngoImages;
 }
