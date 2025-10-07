@@ -3,7 +3,7 @@ package com.platform.user_service.services.Ngo.Impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.NgoImageDto;
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
-import com.platform.user_service.entities.NgoDocument;
+import com.platform.user_service.entities.NgoDocumentEntity;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
@@ -49,7 +49,7 @@ public class NgoRegisterService implements INgoRegisterService {
             UUID userId = getCurrentUserId();
             validateUserHasNgo(userId);
             NgoEntity ngoEntity = buildNgoEntity(ngoCreateRequestDto, userId);
-            List<NgoDocument> ngoDocuments = buildNgoDocuments(ngoCreateRequestDto.getDocumentsId(), ngoEntity, userId);
+            List<NgoDocumentEntity> ngoDocuments = buildNgoDocuments(ngoCreateRequestDto.getDocumentsId(), ngoEntity, userId);
             List<NgoImageEntity> ngoImages = buildNgoImages(ngoCreateRequestDto.getImages(), ngoEntity, userId);
             ngoEntity.setNgoDocuments(ngoDocuments);
             ngoEntity.setNgoImages(ngoImages);
@@ -95,12 +95,12 @@ public class NgoRegisterService implements INgoRegisterService {
                 .build();
     }
 
-    private List<NgoDocument> buildNgoDocuments(List<String> documentsId, NgoEntity ngoEntity, UUID userId) {
-        List<NgoDocument> ngoDocuments = new ArrayList<>();
+    private List<NgoDocumentEntity> buildNgoDocuments(List<String> documentsId, NgoEntity ngoEntity, UUID userId) {
+        List<NgoDocumentEntity> ngoDocuments = new ArrayList<>();
         if (documentsId != null) {
             for (String docId : documentsId) {
                 UUID documentUuid = uuidConversion(docId, "documentId");
-                NgoDocument ngoDocument = NgoDocument.builder()
+                NgoDocumentEntity ngoDocument = NgoDocumentEntity.builder()
                         .id(UUID.randomUUID())
                         .ngo(ngoEntity)
                         .fileId(documentUuid)

@@ -7,13 +7,13 @@ import com.platform.user_service.dtos.response.NgoPendingDto;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
-import com.platform.user_service.entities.UserRoleEntity;
 import com.platform.user_service.repositories.NgoRepository;
 import com.platform.user_service.services.IContextService;
 import com.platform.user_service.services.Ngo.INgoPendingService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -37,31 +37,39 @@ public class NgoPendingService implements INgoPendingService {
      */
     @Override
     public List<NgoPendingDto> getPending() {
+        LOG.trace("Retrieving pending NGOs");
         checkAdmin();
-        return getAllPending();
+        List<NgoEntity> pendingNgos = findAllPendingNgos();
+        return pendingNgos.stream().map(this::mapNgoPendingDto).toList();
     }
 
     private void checkAdmin() {
         if (!contextService.isAdmin()) {
-            LOG.error("User is not admin");
+            LOG.warn("User is not admin");
             throw new CustomException("User is unauthorized", HttpStatus.UNAUTHORIZED);
         }
     }
-    private List<NgoPendingDto> getAllPending() {
-        List<NgoEntity> pendingEntity = ngoRepository.findAllPending();
-        return pendingEntity.stream().map(ngo -> NgoPendingDto.builder()
-                .id(ngo.getId().toString())
-                .name(ngo.getName())
-                .description(ngo.getDescription())
-                .bannerFileId(ngo.getBannerFileId().toString())
-                .profileFileId(ngo.getProfileFileId().toString())
-                .createdDateTime(ngo.getCreatedDatetime())
-                .userCreator(mapUserCreator(ngo.getUserIdCreator()))
-                .documentsId(ngo.getNgoDocuments().stream().map(doc -> doc.getFileId().toString()).toList())
-                .images(ngo.getNgoImages().stream().map(this::mapNgoImageDto).toList())
-                .build()).toList();
+    private List<NgoEntity> findAllPendingNgos() {
+        try {
+            return ngoRepository.findAllPending();
+        } catch (DataAccessException ex) {
+            LOG.error("Database access error while retrieving pending NGOs: {}", ex.getMessage());
+            return List.of();
+        }
     }
-
+    private NgoPendingDto mapNgoPendingDto(NgoEntity ngoEntity) {
+        return NgoPendingDto.builder()
+                .id(ngoEntity.getId().toString())
+                .name(ngoEntity.getName())
+                .description(ngoEntity.getDescription())
+                .bannerFileId(ngoEntity.getBannerFileId().toString())
+                .profileFileId(ngoEntity.getProfileFileId().toString())
+                .createdDateTime(ngoEntity.getCreatedDatetime())
+                .userCreator(mapUserCreator(ngoEntity.getUserIdCreator()))
+                .documentsId(ngoEntity.getNgoDocuments().stream().map(doc -> doc.getFileId().toString()).toList())
+                .images(ngoEntity.getNgoImages().stream().map(this::mapNgoImageDto).toList())
+                .build();
+    }
     private UserDto mapUserCreator(UserEntity userEntity) {
         return UserDto.builder()
                 .id(userEntity.getId().toString())

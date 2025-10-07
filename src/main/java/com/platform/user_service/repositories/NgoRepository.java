@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 /**
  * Repository interface for managing NgoEntity entities.
@@ -36,4 +37,12 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
             + "and d.enabled = true "
             + "and (i.enabled = true or i.enabled is null)")
     List<NgoEntity> findAllPending();
+    /**
+     * Finds an enabled NGO by its ID.
+     *
+     * @param id the ID of the NGO
+     * @return an Optional containing the NgoEntity if found and enabled,
+     * or empty if not found or disabled
+     */
+    Optional<NgoEntity> findByIdAndEnabledTrue(UUID id);
 }

@@ -79,7 +79,7 @@ public class NgoEntity extends AuditEntity {
      * Documents submitted by the NGO for validation.
      */
     @OneToMany(mappedBy = "ngo", cascade = CascadeType.ALL)
-    private List<NgoDocument> ngoDocuments;
+    private List<NgoDocumentEntity> ngoDocuments;
 
     /**
      * Images associated with the NGO.
