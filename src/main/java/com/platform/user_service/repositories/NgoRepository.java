@@ -45,4 +45,17 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      * or empty if not found or disabled
      */
     Optional<NgoEntity> findByIdAndEnabledTrue(UUID id);
+    /**
+     * Retrieves a full NgoEntity by its ID, including associated documents, images, and the creator user.
+     * This query uses JOIN FETCH to eagerly load related entities.
+     *
+     * @param id the ID of the NGO
+     * @return an Optional containing the full NgoEntity if found, or empty if not found
+     */
+    @Query("SELECT n FROM NgoEntity n "
+            + "JOIN FETCH n.ngoDocuments d "
+            + "LEFT JOIN FETCH n.ngoImages i "
+            + "JOIN FETCH n.userIdCreator u "
+            + " WHERE n.id = :id and n.enabled = true")
+    Optional<NgoEntity> findByIdFull(UUID id);
 }

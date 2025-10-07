@@ -1,12 +1,21 @@
 package com.platform.user_service.services.Ngo.Impl;
 
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
+import com.platform.user_service.dtos.request.NgoUpdateRequestDto;
+import com.platform.user_service.dtos.request.NgoValidationRequestDto;
+import com.platform.user_service.dtos.response.NgoPendingDto;
+import com.platform.user_service.services.Ngo.INgoPendingService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
 import com.platform.user_service.services.Ngo.INgoService;
+import com.platform.user_service.services.Ngo.INgoUpdateService;
+import com.platform.user_service.services.Ngo.INgoValidationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Service implementation for managing NGOs.
@@ -19,6 +28,12 @@ public class NgoService implements INgoService {
     private static final Logger LOG = LoggerFactory.getLogger(NgoService.class);
     /** Service for handling NGO registration operations. */
     private final INgoRegisterService ngoRegisterService;
+    /** Service for handling NGO pending operations. */
+    private final INgoPendingService ngoPendingService;
+    /** Service for handling NGO validation operations. */
+    private final INgoValidationService ngoValidationService;
+    /** Service for handling NGO update operations. */
+    private final INgoUpdateService ngoUpdateService;
 
     /**
      * Method to register a new NGO.
@@ -29,5 +44,40 @@ public class NgoService implements INgoService {
     public void registerNgo(NgoCreateRequestDto ngoCreateRequestDto) {
         LOG.trace("In RegisterNgo");
         ngoRegisterService.registerNgo(ngoCreateRequestDto);
+    }
+
+    /**
+     * Updates the information of an existing NGO.
+     *
+     * @param ngoId   The unique identifier of the NGO to be updated.
+     * @param request The DTO containing the updated NGO information.
+     */
+    @Override
+    public void updateNgo(UUID ngoId, NgoUpdateRequestDto request) {
+        LOG.trace("In UpdateNgo");
+        ngoUpdateService.updateNgo(ngoId, request);
+    }
+
+    /**
+     * Retrieves a list of pending validation NGOs.
+     *
+     * @return a list of NgoPendingDto representing the pending NGOs
+     */
+    @Override
+    public List<NgoPendingDto> getPending() {
+        LOG.trace("In getPending");
+        return ngoPendingService.getPending();
+    }
+
+    /**
+     * Validates an NGO based on the provided request data.
+     *
+     * @param ngoId      the ID of the NGO to be validated
+     * @param requestDto the validation request data
+     */
+    @Override
+    public void validateNgo(UUID ngoId, NgoValidationRequestDto requestDto) {
+        LOG.trace("In validateNgo");
+        ngoValidationService.validateNgo(ngoId, requestDto);
     }
 }
