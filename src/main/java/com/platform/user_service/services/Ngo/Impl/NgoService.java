@@ -4,7 +4,7 @@ import com.platform.user_service.dtos.request.NgoCreateRequestDto;
 import com.platform.user_service.dtos.request.NgoUpdateRequestDto;
 import com.platform.user_service.dtos.request.NgoValidationRequestDto;
 import com.platform.user_service.dtos.common.NgoDto;
-import com.platform.user_service.services.Ngo.INgoPendingService;
+import com.platform.user_service.services.Ngo.INgoGetService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
 import com.platform.user_service.services.Ngo.INgoService;
 import com.platform.user_service.services.Ngo.INgoUpdateService;
@@ -28,8 +28,8 @@ public class NgoService implements INgoService {
     private static final Logger LOG = LoggerFactory.getLogger(NgoService.class);
     /** Service for handling NGO registration operations. */
     private final INgoRegisterService ngoRegisterService;
-    /** Service for handling NGO pending operations. */
-    private final INgoPendingService ngoPendingService;
+    /** Service for handling Get NGO operations. */
+    private final INgoGetService ngoGetService;
     /** Service for handling NGO validation operations. */
     private final INgoValidationService ngoValidationService;
     /** Service for handling NGO update operations. */
@@ -66,7 +66,7 @@ public class NgoService implements INgoService {
     @Override
     public List<NgoDto> getPending() {
         LOG.trace("In getPending");
-        return ngoPendingService.getPending();
+        return ngoGetService.getPendingNgos();
     }
 
     /**
@@ -79,5 +79,39 @@ public class NgoService implements INgoService {
     public void validateNgo(UUID ngoId, NgoValidationRequestDto requestDto) {
         LOG.trace("In validateNgo");
         ngoValidationService.validateNgo(ngoId, requestDto);
+    }
+
+    /**
+     * Retrieves a list of all NGOs approved.
+     *
+     * @return a list of NgoDto representing all NGOs
+     */
+    @Override
+    public List<NgoDto> getAllApproveNgos() {
+        LOG.trace("In getAllApproveNgos");
+        return ngoGetService.getAllApproveNgos();
+    }
+
+    /**
+     * Retrieves the details of a specific NGO by its ID.
+     *
+     * @param ngoId the unique identifier of the NGO
+     * @return the NgoDto representing the NGO details
+     */
+    @Override
+    public NgoDto getNgoById(UUID ngoId) {
+        LOG.trace("In getNgoById");
+        return ngoGetService.getNgoById(ngoId);
+    }
+
+    /**
+     * Retrieves the NGO associated with the currently authenticated user.
+     *
+     * @return the NgoDto representing the user's NGO details
+     */
+    @Override
+    public NgoDto getMyNgo() {
+        LOG.trace("In getMyNgo");
+        return ngoGetService.getMyNgo();
     }
 }

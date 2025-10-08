@@ -83,4 +83,39 @@ public class NgoController {
         ngoService.updateNgo(ngoId, ngoUpdateRequestDto);
         return ResponseEntity.ok().build();
     }
+
+    /**
+     * Retrieves a list of all approved NGOs.
+     *
+     * @return a ResponseEntity containing a list of approved NGOs
+     * with HTTP status 200 (OK)
+     */
+    @GetMapping("/all-approved")
+    public ResponseEntity<List<NgoDto>> getAllApprovedNgos() {
+        List<NgoDto> approvedNgos = ngoService.getAllApproveNgos();
+        return ResponseEntity.ok(approvedNgos);
+    }
+    /**
+     * Retrieves the details of a specific NGO by its ID.
+     *
+     * @param ngoId the unique identifier of the NGO
+     * @return a ResponseEntity containing the NgoDto representing the NGO details
+     * with HTTP status 200 (OK)
+     */
+    @GetMapping("/{ngoId}")
+    public ResponseEntity<NgoDto> getNgoById(@PathVariable UUID ngoId) {
+        NgoDto ngoDto = ngoService.getNgoById(ngoId);
+        return ResponseEntity.ok(ngoDto);
+    }
+    /**
+     * Retrieves the NGO associated with the currently authenticated user.
+     *
+     * @return a ResponseEntity containing the NgoDto representing the user's NGO details
+     * with HTTP status 200 (OK)
+     */
+    @GetMapping("/my-ngo")
+    public ResponseEntity<NgoDto> getMyNgo() {
+        NgoDto ngoDto = ngoService.getMyNgo();
+        return ResponseEntity.ok(ngoDto);
+    }
 }

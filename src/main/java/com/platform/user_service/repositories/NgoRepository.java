@@ -58,4 +58,24 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
             + "JOIN FETCH n.userIdCreator u "
             + " WHERE n.id = :id and n.enabled = true")
     Optional<NgoEntity> findByIdFull(UUID id);
+
+    /**
+     * Finds an NGO by the ID of the user who created it, including associated documents,
+     * images, and the creator user.
+     * @param userIdCreatorId the ID of the user who created the NGO
+     * @return an Optional containing the NgoEntity if found, or empty if not found
+     */
+    @Query("SELECT n FROM NgoEntity n "
+            + "JOIN FETCH n.ngoDocuments d "
+            + "LEFT JOIN FETCH n.ngoImages i "
+            + "JOIN FETCH n.userIdCreator u "
+            + " WHERE u.id = :userIdCreatorId")
+    Optional<NgoEntity> findByUserIdCreatorId(UUID userIdCreatorId);
+
+    /**
+     * Retrieves all enabled NGOs.
+     *
+     * @return a list of enabled NgoEntity objects
+     */
+    List<NgoEntity> findAllByEnabledIsTrue();
 }
