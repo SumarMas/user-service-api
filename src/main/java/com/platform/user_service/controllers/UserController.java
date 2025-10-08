@@ -1,5 +1,6 @@
 package com.platform.user_service.controllers;
 
+import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
@@ -64,5 +65,16 @@ public class UserController {
     public ResponseEntity<Void> updateUser(@PathVariable("userId")UUID userId, @RequestBody @Valid UserUpdateDto userUpdateDto) {
         userService.updateUser(userId, userUpdateDto);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Retrieves the profile information of the currently authenticated user.
+     *
+     * @return a ResponseEntity containing the UserDto
+     * with the user's profile details
+     */
+    @GetMapping("/my-profile")
+    public ResponseEntity<UserDto> getMyProfile() {
+        return ResponseEntity.ok(userService.getMyProfile());
     }
 }

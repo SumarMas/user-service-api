@@ -1,5 +1,6 @@
 package com.platform.user_service.services;
 
+import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
@@ -36,4 +37,11 @@ public interface IUserService {
      * @param userUpdateDto The DTO containing the updated user information.
      */
     void updateUser(UUID userId, UserUpdateDto userUpdateDto);
+
+    /**
+     * Retrieves the profile information of the currently authenticated user.
+     *
+     * @return a UserDto containing the user's profile details
+     */
+    UserDto getMyProfile();
 }

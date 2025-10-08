@@ -1,5 +1,6 @@
 package com.platform.user_service.services.impl;
 
+import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
@@ -57,5 +58,15 @@ public class UserService implements IUserService {
     @Override
     public void updateUser(UUID userId, UserUpdateDto userUpdateDto) {
         updateUserService.updateUser(userId, userUpdateDto);
+    }
+
+    /**
+     * Retrieves the profile information of the currently authenticated user.
+     *
+     * @return a UserDto containing the user's profile details
+     */
+    @Override
+    public UserDto getMyProfile() {
+        return getUserService.getMyProfile();
     }
 }
