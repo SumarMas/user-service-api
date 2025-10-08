@@ -64,7 +64,7 @@ public class NgoController {
      * @return a ResponseEntity with HTTP status 200 (OK)
      * if the validation is successful
      */
-    @PutMapping("/{ngoId}/validate}")
+    @PutMapping("/{ngoId}/validate")
     public ResponseEntity<Void> validateNgo(@PathVariable UUID ngoId, @RequestBody NgoValidationRequestDto requestDto) {
         ngoService.validateNgo(ngoId, requestDto);
         return ResponseEntity.ok().build();
