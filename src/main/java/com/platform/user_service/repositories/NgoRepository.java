@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 /**
  * Repository interface for managing NgoEntity entities.
@@ -20,4 +22,51 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
     @Query("SELECT CASE WHEN COUNT(n) > 0 THEN true ELSE false END FROM NgoEntity n "
             + "WHERE n.userIdCreator.id = :userIdCreatorId and n.enabled = true")
     boolean existsByUserIdCreatorId(UUID userIdCreatorId);
+    /**
+     * Retrieves all NGOs with a 'PENDING' verification status.
+     * This query fetches associated documents, images, and the creator user,
+     * ensuring that only enabled entities are included.
+     *
+     * @return a list of NgoEntity objects with 'PENDING' status
+     */
+    @Query("SELECT distinct n FROM NgoEntity n "
+            + "WHERE n.verificationStatus = 'PENDING' and n.enabled = true")
+    List<NgoEntity> findAllPending();
+    /**
+     * Finds an enabled NGO by its ID.
+     *
+     * @param id the ID of the NGO
+     * @return an Optional containing the NgoEntity if found and enabled,
+     * or empty if not found or disabled
+     */
+    Optional<NgoEntity> findByIdAndEnabledTrue(UUID id);
+    /**
+     * Retrieves a full NgoEntity by its ID,
+     * including associated documents, images, and the creator user.
+     *
+     * @param id the ID of the NGO
+     * @return an Optional containing the full NgoEntity if found,
+     * or empty if not found
+     */
+    @Query("SELECT n FROM NgoEntity n "
+            + " WHERE n.id = :id and n.enabled = true")
+    Optional<NgoEntity> findByIdFull(UUID id);
+
+    /**
+     * Finds an NGO by the ID of the user who created it,
+     * including associated documents,
+     * images, and the creator user.
+     * @param userIdCreatorId the ID of the user who created the NGO
+     * @return an Optional containing the NgoEntity if found, or empty if not found
+     */
+    @Query("SELECT n FROM NgoEntity n "
+            + " WHERE n.userIdCreator.id = :userIdCreatorId")
+    Optional<NgoEntity> findByUserIdCreatorId(UUID userIdCreatorId);
+
+    /**
+     * Retrieves all enabled NGOs.
+     *
+     * @return a list of enabled NgoEntity objects
+     */
+    List<NgoEntity> findAllByEnabledIsTrue();
 }

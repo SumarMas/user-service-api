@@ -1,9 +1,11 @@
 package com.platform.user_service.services.impl;
 
 import com.platform.user_service.controllers.manageExceptions.CustomException;
+import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.repositories.UserRepository;
+import com.platform.user_service.services.IContextService;
 import com.platform.user_service.services.IGetUserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -26,6 +28,8 @@ public class GetUserService implements IGetUserService {
     private static final Logger LOG = LoggerFactory.getLogger(GetUserService.class);
     /** Repository for accessing user data. */
     private final UserRepository userRepository;
+    /** Service for context-related operations. */
+    private final IContextService contextService;
 
     /**
      * Retrieves user login data based on the provided user ID.
@@ -42,6 +46,20 @@ public class GetUserService implements IGetUserService {
         return buildUserLoginResponseDto(userEntity);
     }
 
+    /**
+     * Retrieves the profile information of the currently authenticated user.
+     *
+     * @return a UserDto containing the user's profile details
+     */
+    @Override
+    public UserDto getMyProfile() {
+        LOG.trace("getMyProfile()");
+        UUID userID = getCurrentUserId();
+        UserEntity userEntity = getUserEntityById(userID);
+        LOG.trace("Building UserDto");
+        return buildUserDto(userEntity);
+    }
+
     private UUID validateUserId(String userId) {
         try {
             return UUID.fromString(userId);
@@ -49,6 +67,15 @@ public class GetUserService implements IGetUserService {
             LOG.error("Invalid UserId format ID: {}; ERROR: {}", userId, ex.getMessage());
             throw new CustomException("Invalid User ID format", HttpStatus.BAD_REQUEST, ex);
         }
+    }
+
+    private UUID getCurrentUserId() {
+        UUID userId =  contextService.getUserId();
+        if (userId == null) {
+            LOG.warn("User ID not found in context");
+            throw new CustomException("User ID not found in context", HttpStatus.UNAUTHORIZED);
+        }
+        return userId;
     }
 
     private UserEntity getUserEntityById(UUID userUUID) {
@@ -73,6 +100,21 @@ public class GetUserService implements IGetUserService {
         LOG.trace("Building UserLoginResponseDto");
         return UserLoginResponseDto.builder()
                 .userId(userEntity.getId())
+                .roles(userEntity.getUserRoles().stream()
+                        .map(role -> role.getRol().name())
+                        .toList())
+                .build();
+    }
+
+    private UserDto buildUserDto(UserEntity userEntity) {
+        return UserDto.builder()
+                .id(userEntity.getId().toString())
+                .firstName(userEntity.getFirstName())
+                .lastName(userEntity.getLastName())
+                .email(userEntity.getEmail())
+                .profileFileId(userEntity.getProfileFileId() != null
+                        ? userEntity.getProfileFileId().toString() : null)
+                .status(userEntity.getStatus().name())
                 .roles(userEntity.getUserRoles().stream()
                         .map(role -> role.getRol().name())
                         .toList())

@@ -3,14 +3,16 @@ package com.platform.user_service.services.Ngo.Impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.NgoImageDto;
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
-import com.platform.user_service.entities.NgoDocument;
+import com.platform.user_service.entities.NgoDocumentEntity;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
+import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.NgoRepository;
 import com.platform.user_service.services.IContextService;
+import com.platform.user_service.services.IUpdateUserService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -34,6 +36,8 @@ public class NgoRegisterService implements INgoRegisterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NgoRegisterService.class);
     /** Repository for NGO entities. */
     private final NgoRepository ngoRepository;
+    /** Service for updating user information. */
+    private final IUpdateUserService updateUserService;
     /** Service for context-related operations. */
     private final IContextService contextService;
     /**
@@ -49,12 +53,13 @@ public class NgoRegisterService implements INgoRegisterService {
             UUID userId = getCurrentUserId();
             validateUserHasNgo(userId);
             NgoEntity ngoEntity = buildNgoEntity(ngoCreateRequestDto, userId);
-            List<NgoDocument> ngoDocuments = buildNgoDocuments(ngoCreateRequestDto.getDocumentsId(), ngoEntity, userId);
+            List<NgoDocumentEntity> ngoDocuments = buildNgoDocuments(ngoCreateRequestDto.getDocumentsId(), ngoEntity, userId);
             List<NgoImageEntity> ngoImages = buildNgoImages(ngoCreateRequestDto.getImages(), ngoEntity, userId);
             ngoEntity.setNgoDocuments(ngoDocuments);
             ngoEntity.setNgoImages(ngoImages);
             LOGGER.trace("NgoEntity={}", ngoEntity);
             ngoRepository.save(ngoEntity);
+            addRolNgoToUser(userId);
             LOGGER.info("NGO with ID {} successfully registered by user {}", ngoEntity.getId(), userId);
         } catch (DataAccessException ex) {
             LOGGER.error("Database error occurred while registering NGO: {}", ex.getMessage());
@@ -78,6 +83,10 @@ public class NgoRegisterService implements INgoRegisterService {
         }
     }
 
+    private void addRolNgoToUser(UUID userId) {
+        updateUserService.addRoleToUser(userId, UserRole.ORGANIZATION);
+    }
+
     private NgoEntity buildNgoEntity(NgoCreateRequestDto ngoCreateRequestDto, UUID userId) {
         UserEntity userEntity = UserEntity.builder().id(userId).build();
         return NgoEntity.builder()
@@ -95,12 +104,12 @@ public class NgoRegisterService implements INgoRegisterService {
                 .build();
     }
 
-    private List<NgoDocument> buildNgoDocuments(List<String> documentsId, NgoEntity ngoEntity, UUID userId) {
-        List<NgoDocument> ngoDocuments = new ArrayList<>();
+    private List<NgoDocumentEntity> buildNgoDocuments(List<String> documentsId, NgoEntity ngoEntity, UUID userId) {
+        List<NgoDocumentEntity> ngoDocuments = new ArrayList<>();
         if (documentsId != null) {
             for (String docId : documentsId) {
                 UUID documentUuid = uuidConversion(docId, "documentId");
-                NgoDocument ngoDocument = NgoDocument.builder()
+                NgoDocumentEntity ngoDocument = NgoDocumentEntity.builder()
                         .id(UUID.randomUUID())
                         .ngo(ngoEntity)
                         .fileId(documentUuid)

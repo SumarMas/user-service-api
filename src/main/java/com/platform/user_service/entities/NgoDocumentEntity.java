@@ -27,7 +27,7 @@ import java.util.UUID;
 @SuperBuilder
 @Entity
 @Table(name = "ngo_documents")
-public class NgoDocument extends AuditEntity {
+public class NgoDocumentEntity extends AuditEntity {
     /**
      * Unique identifier for the NGO document.
      */
