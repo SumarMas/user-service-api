@@ -1,8 +1,6 @@
-package com.platform.user_service.dtos.response;
+package com.platform.user_service.dtos.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.platform.user_service.dtos.common.NgoImageDto;
-import com.platform.user_service.dtos.common.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NgoPendingDto {
+public class NgoDto {
     /**
      * Unique identifier for the NGO.
      */

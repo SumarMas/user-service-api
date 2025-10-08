@@ -3,7 +3,7 @@ package com.platform.user_service.services.Ngo;
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
 import com.platform.user_service.dtos.request.NgoUpdateRequestDto;
 import com.platform.user_service.dtos.request.NgoValidationRequestDto;
-import com.platform.user_service.dtos.response.NgoPendingDto;
+import com.platform.user_service.dtos.common.NgoDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public interface INgoService {
      *
      * @return a list of NgoPendingDto representing the pending NGOs
      */
-    List<NgoPendingDto> getPending();
+    List<NgoDto> getPending();
 
     /**
      * Validates an NGO based on the provided request data.

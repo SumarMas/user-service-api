@@ -3,7 +3,7 @@ package com.platform.user_service.services.Ngo.Impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.NgoImageDto;
 import com.platform.user_service.dtos.common.UserDto;
-import com.platform.user_service.dtos.response.NgoPendingDto;
+import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
@@ -36,7 +36,7 @@ public class NgoPendingService implements INgoPendingService {
      * @return a list of NgoPendingDto representing the pending NGOs
      */
     @Override
-    public List<NgoPendingDto> getPending() {
+    public List<NgoDto> getPending() {
         LOG.trace("Retrieving pending NGOs");
         checkAdmin();
         List<NgoEntity> pendingNgos = findAllPendingNgos();
@@ -57,8 +57,8 @@ public class NgoPendingService implements INgoPendingService {
             return List.of();
         }
     }
-    private NgoPendingDto mapNgoPendingDto(NgoEntity ngoEntity) {
-        return NgoPendingDto.builder()
+    private NgoDto mapNgoPendingDto(NgoEntity ngoEntity) {
+        return NgoDto.builder()
                 .id(ngoEntity.getId().toString())
                 .name(ngoEntity.getName())
                 .description(ngoEntity.getDescription())

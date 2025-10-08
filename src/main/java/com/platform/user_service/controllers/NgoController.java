@@ -3,7 +3,7 @@ package com.platform.user_service.controllers;
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
 import com.platform.user_service.dtos.request.NgoUpdateRequestDto;
 import com.platform.user_service.dtos.request.NgoValidationRequestDto;
-import com.platform.user_service.dtos.response.NgoPendingDto;
+import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.services.Ngo.INgoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,8 +51,8 @@ public class NgoController {
      * with HTTP status 200 (OK)
      */
     @GetMapping("/pending-approvals")
-    public ResponseEntity<List<NgoPendingDto>> getPendingNgoApprovals() {
-        List<NgoPendingDto> pendingNgos = ngoService.getPending();
+    public ResponseEntity<List<NgoDto>> getPendingNgoApprovals() {
+        List<NgoDto> pendingNgos = ngoService.getPending();
         return ResponseEntity.ok(pendingNgos);
     }
 

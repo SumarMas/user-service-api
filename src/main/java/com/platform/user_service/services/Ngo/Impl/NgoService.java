@@ -3,7 +3,7 @@ package com.platform.user_service.services.Ngo.Impl;
 import com.platform.user_service.dtos.request.NgoCreateRequestDto;
 import com.platform.user_service.dtos.request.NgoUpdateRequestDto;
 import com.platform.user_service.dtos.request.NgoValidationRequestDto;
-import com.platform.user_service.dtos.response.NgoPendingDto;
+import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.services.Ngo.INgoPendingService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
 import com.platform.user_service.services.Ngo.INgoService;
@@ -64,7 +64,7 @@ public class NgoService implements INgoService {
      * @return a list of NgoPendingDto representing the pending NGOs
      */
     @Override
-    public List<NgoPendingDto> getPending() {
+    public List<NgoDto> getPending() {
         LOG.trace("In getPending");
         return ngoPendingService.getPending();
     }
