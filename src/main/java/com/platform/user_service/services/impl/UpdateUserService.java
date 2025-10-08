@@ -3,6 +3,9 @@ package com.platform.user_service.services.impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.entities.UserEntity;
+import com.platform.user_service.entities.UserRoleEntity;
+import com.platform.user_service.entities.embeddable.UserRolId;
+import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.UserRepository;
 import com.platform.user_service.services.IContextService;
 import com.platform.user_service.services.IUpdateUserService;
@@ -61,6 +64,42 @@ public class UpdateUserService implements IUpdateUserService {
             LOGGER.error("Database access error while updating user ID: {}, ERROR: {}",
                     userId, ex.getMessage());
             throw new CustomException("Error updating user data", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    /**
+     * Adds a role to the user based on the provided user ID and role name.
+     *
+     * @param userId   The UUID of the user to whom the role will be added.
+     * @param role The  role to be added to the user.
+     */
+    @Override
+    public void addRoleToUser(UUID userId, UserRole role) {
+        UserEntity userEntity;
+        try {
+            userEntity = getUserEntity(userId);
+        } catch (CustomException ex) {
+            LOGGER.error("Failed to add role '{}' to user ID: {}. ERROR: {}",
+                    role.name(), userId, ex.getMessage());
+            throw new CustomException("Error adding role to user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+        if (userEntity.getUserRoles().stream().anyMatch(r -> r.getRol().equals(role))) {
+            LOGGER.info("User ID: {} already has role '{}'. No action taken.", userId, role);
+            return;
+        }
+        userEntity.getUserRoles().add(UserRoleEntity.builder()
+                .id(new UserRolId(userId, role))
+                .createdUser(userId)
+                .lastUpdatedUser(userId)
+                .user(userEntity)
+                .build());
+        try {
+            userRepository.save(userEntity);
+            LOGGER.info("Role '{}' successfully added to user ID: {}.", role, userId);
+        } catch (DataAccessException ex) {
+            LOGGER.error("Database access error while adding role '{}' to user ID: {}, ERROR: {}",
+                    role, userId, ex.getMessage());
+            throw new CustomException("Error adding role to user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

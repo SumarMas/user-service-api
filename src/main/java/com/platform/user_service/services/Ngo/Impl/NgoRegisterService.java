@@ -9,8 +9,10 @@ import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
+import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.NgoRepository;
 import com.platform.user_service.services.IContextService;
+import com.platform.user_service.services.IUpdateUserService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -34,6 +36,8 @@ public class NgoRegisterService implements INgoRegisterService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NgoRegisterService.class);
     /** Repository for NGO entities. */
     private final NgoRepository ngoRepository;
+    /** Service for updating user information. */
+    private final IUpdateUserService updateUserService;
     /** Service for context-related operations. */
     private final IContextService contextService;
     /**
@@ -55,6 +59,7 @@ public class NgoRegisterService implements INgoRegisterService {
             ngoEntity.setNgoImages(ngoImages);
             LOGGER.trace("NgoEntity={}", ngoEntity);
             ngoRepository.save(ngoEntity);
+            addRolNgoToUser(userId);
             LOGGER.info("NGO with ID {} successfully registered by user {}", ngoEntity.getId(), userId);
         } catch (DataAccessException ex) {
             LOGGER.error("Database error occurred while registering NGO: {}", ex.getMessage());
@@ -76,6 +81,10 @@ public class NgoRegisterService implements INgoRegisterService {
             LOGGER.warn("User with ID {} already has an NGO", userId);
             throw new CustomException("User already has an NGO", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private void addRolNgoToUser(UUID userId) {
+        updateUserService.addRoleToUser(userId, UserRole.ORGANIZATION);
     }
 
     private NgoEntity buildNgoEntity(NgoCreateRequestDto ngoCreateRequestDto, UUID userId) {
