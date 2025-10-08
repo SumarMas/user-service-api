@@ -110,7 +110,8 @@ public class NgoController {
     /**
      * Retrieves the NGO associated with the currently authenticated user.
      *
-     * @return a ResponseEntity containing the NgoDto representing the user's NGO details
+     * @return a ResponseEntity containing the NgoDto representing
+     * the user's NGO details
      * with HTTP status 200 (OK)
      */
     @GetMapping("/my-ngo")

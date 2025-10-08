@@ -118,7 +118,8 @@ public class NgoGetService implements INgoGetService {
                     .orElseThrow(() -> new CustomException("NGO not found", HttpStatus.NOT_FOUND));
         } catch (DataAccessException ex) {
             LOG.error("Database access error while retrieving NGO by ID: {}", ex.getMessage());
-            throw new CustomException("An error occurred while obtaining the information. ", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("An error occurred while obtaining the information. ",
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
     private NgoEntity findNgoByUserIdCreator(UUID userIdCreatorId) {
@@ -127,7 +128,8 @@ public class NgoGetService implements INgoGetService {
                     .orElseThrow(() -> new CustomException("NGO not found for the user", HttpStatus.NOT_FOUND));
         } catch (DataAccessException ex) {
             LOG.error("Database access error while retrieving NGO by user ID: {}", ex.getMessage());
-            throw new CustomException("An error occurred while obtaining the information.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("An error occurred while obtaining the information.",
+                    HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
     private NgoDto mapNgoPendingDto(NgoEntity ngoEntity) {

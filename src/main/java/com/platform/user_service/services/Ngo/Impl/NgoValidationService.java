@@ -22,7 +22,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Implementation of the INgoValidationService interface for NGO validation operations.
+ * Implementation of the INgoValidationService
+ * interface for NGO validation operations.
  */
 @Service
 @RequiredArgsConstructor

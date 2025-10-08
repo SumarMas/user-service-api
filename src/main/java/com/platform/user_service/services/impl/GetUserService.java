@@ -112,8 +112,8 @@ public class GetUserService implements IGetUserService {
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .email(userEntity.getEmail())
-                .profileFileId(userEntity.getProfileFileId() != null ?
-                        userEntity.getProfileFileId().toString() : null)
+                .profileFileId(userEntity.getProfileFileId() != null
+                        ? userEntity.getProfileFileId().toString() : null)
                 .status(userEntity.getStatus().name())
                 .roles(userEntity.getUserRoles().stream()
                         .map(role -> role.getRol().name())

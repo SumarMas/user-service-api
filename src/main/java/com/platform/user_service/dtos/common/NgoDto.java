@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Data Transfer Object (DTO) representing an NGO (Non-Governmental Organization).
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

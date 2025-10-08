@@ -46,11 +46,12 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      */
     Optional<NgoEntity> findByIdAndEnabledTrue(UUID id);
     /**
-     * Retrieves a full NgoEntity by its ID, including associated documents, images, and the creator user.
-     * This query uses JOIN FETCH to eagerly load related entities.
+     * Retrieves a full NgoEntity by its ID,
+     * including associated documents, images, and the creator user.
      *
      * @param id the ID of the NGO
-     * @return an Optional containing the full NgoEntity if found, or empty if not found
+     * @return an Optional containing the full NgoEntity if found,
+     * or empty if not found
      */
     @Query("SELECT n FROM NgoEntity n "
             + "JOIN FETCH n.ngoDocuments d "
@@ -60,7 +61,8 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
     Optional<NgoEntity> findByIdFull(UUID id);
 
     /**
-     * Finds an NGO by the ID of the user who created it, including associated documents,
+     * Finds an NGO by the ID of the user who created it,
+     * including associated documents,
      * images, and the creator user.
      * @param userIdCreatorId the ID of the user who created the NGO
      * @return an Optional containing the NgoEntity if found, or empty if not found
