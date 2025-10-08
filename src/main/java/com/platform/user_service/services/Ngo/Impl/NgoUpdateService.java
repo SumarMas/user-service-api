@@ -124,7 +124,7 @@ public class NgoUpdateService implements INgoUpdateService {
         }
         for (String newDocumentId : newDocumentsIds) {
             UUID documentUuid = uuidConversion(newDocumentId, "documentId");
-            boolean exists = documents.stream().anyMatch(doc -> doc.getId().equals(documentUuid));
+            boolean exists = documents.stream().anyMatch(doc -> doc.getFileId().equals(documentUuid));
             if (!exists) {
                 hasChanges = true;
                 NgoDocumentEntity newDocument = NgoDocumentEntity.builder()

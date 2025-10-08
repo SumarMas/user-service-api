@@ -1,5 +1,6 @@
 package com.platform.user_service.dtos.common;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -60,8 +61,15 @@ public class NgoDto {
     private List<NgoImageDto> images;
 
     /**
+     * The status of the NGO.
+     */
+    @JsonProperty("status")
+    private String status;
+
+    /**
      * The creation date and time of the NGO entry.
      */
     @JsonProperty("createdDateTime")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdDateTime;
 }

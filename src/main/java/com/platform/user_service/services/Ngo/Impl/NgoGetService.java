@@ -4,6 +4,7 @@ import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.dtos.common.NgoImageDto;
 import com.platform.user_service.dtos.common.UserDto;
+import com.platform.user_service.entities.AuditEntity;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
@@ -150,8 +151,13 @@ public class NgoGetService implements INgoGetService {
                 .profileFileId(ngoEntity.getProfileFileId().toString())
                 .createdDateTime(ngoEntity.getCreatedDatetime())
                 .userCreator(mapUserCreator(ngoEntity.getUserIdCreator()))
-                .documentsId(ngoEntity.getNgoDocuments().stream().map(doc -> doc.getFileId().toString()).toList())
-                .images(ngoEntity.getNgoImages().stream().map(this::mapNgoImageDto).toList())
+                .documentsId(ngoEntity.getNgoDocuments().stream()
+                        .filter(AuditEntity::getEnabled)
+                        .map(doc -> doc.getFileId().toString()).toList())
+                .images(ngoEntity.getNgoImages().stream()
+                        .filter(AuditEntity::getEnabled)
+                        .map(this::mapNgoImageDto).toList())
+                .status(ngoEntity.getVerificationStatus().name())
                 .build();
     }
     private UserDto mapUserCreator(UserEntity userEntity) {
