@@ -161,7 +161,7 @@ public class NgoGetService implements INgoGetService {
                 .lastName(userEntity.getLastName())
                 .email(userEntity.getEmail())
                 .roles(userEntity.getUserRoles().stream().map(rol -> rol.getRol().name()).toList())
-                .profileFileId(userEntity.getProfileFileId().toString())
+                .profileFileId(userEntity.getProfileFileId() != null ? userEntity.getProfileFileId().toString() : null)
                 .status(userEntity.getStatus().name())
                 .build();
     }

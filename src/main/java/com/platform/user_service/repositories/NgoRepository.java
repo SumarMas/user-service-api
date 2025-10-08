@@ -30,12 +30,7 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      * @return a list of NgoEntity objects with 'PENDING' status
      */
     @Query("SELECT distinct n FROM NgoEntity n "
-            + "JOIN FETCH n.ngoDocuments d "
-            + "LEFT JOIN FETCH n.ngoImages i "
-            + "JOIN FETCH n.userIdCreator u "
-            + "WHERE n.verificationStatus = 'PENDING' and n.enabled = true and u.enabled = true "
-            + "and d.enabled = true "
-            + "and (i.enabled = true or i.enabled is null)")
+            + "WHERE n.verificationStatus = 'PENDING' and n.enabled = true")
     List<NgoEntity> findAllPending();
     /**
      * Finds an enabled NGO by its ID.
@@ -54,9 +49,6 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      * or empty if not found
      */
     @Query("SELECT n FROM NgoEntity n "
-            + "JOIN FETCH n.ngoDocuments d "
-            + "LEFT JOIN FETCH n.ngoImages i "
-            + "JOIN FETCH n.userIdCreator u "
             + " WHERE n.id = :id and n.enabled = true")
     Optional<NgoEntity> findByIdFull(UUID id);
 
@@ -68,10 +60,7 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      * @return an Optional containing the NgoEntity if found, or empty if not found
      */
     @Query("SELECT n FROM NgoEntity n "
-            + "JOIN FETCH n.ngoDocuments d "
-            + "LEFT JOIN FETCH n.ngoImages i "
-            + "JOIN FETCH n.userIdCreator u "
-            + " WHERE u.id = :userIdCreatorId")
+            + " WHERE n.userIdCreator.id = :userIdCreatorId")
     Optional<NgoEntity> findByUserIdCreatorId(UUID userIdCreatorId);
 
     /**
