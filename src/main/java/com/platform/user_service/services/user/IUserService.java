@@ -44,4 +44,11 @@ public interface IUserService {
      * @return a UserDto containing the user's profile details
      */
     UserDto getMyProfile();
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    UserDto getUserById(UUID userId);
 }

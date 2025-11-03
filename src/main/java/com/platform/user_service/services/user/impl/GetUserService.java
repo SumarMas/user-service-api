@@ -55,8 +55,19 @@ public class GetUserService implements IGetUserService {
     public UserDto getMyProfile() {
         LOG.trace("getMyProfile()");
         UUID userID = getCurrentUserId();
-        UserEntity userEntity = getUserEntityById(userID);
-        LOG.trace("Building UserDto");
+        return getUserById(userID);
+    }
+
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    @Override
+    public UserDto getUserById(UUID userId) {
+        LOG.trace("getUserById()");
+        UserEntity userEntity = getUserEntityById(userId);
         return buildUserDto(userEntity);
     }
 

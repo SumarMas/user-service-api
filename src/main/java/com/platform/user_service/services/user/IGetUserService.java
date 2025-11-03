@@ -4,6 +4,8 @@ import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 /**
  * Service interface for retrieving user information.
  */
@@ -22,4 +24,11 @@ public interface IGetUserService {
      * @return a UserDto containing the user's profile details
      */
     UserDto getMyProfile();
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    UserDto getUserById(UUID userId);
 }

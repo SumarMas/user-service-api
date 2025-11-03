@@ -69,4 +69,15 @@ public class UserService implements IUserService {
     public UserDto getMyProfile() {
         return getUserService.getMyProfile();
     }
+
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    @Override
+    public UserDto getUserById(UUID userId) {
+        return getUserService.getUserById(userId);
+    }
 }

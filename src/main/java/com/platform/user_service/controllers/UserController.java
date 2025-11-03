@@ -77,4 +77,16 @@ public class UserController {
     public ResponseEntity<UserDto> getMyProfile() {
         return ResponseEntity.ok(userService.getMyProfile());
     }
+
+    /**
+     * Retrieves the profile information of a user by their ID.
+     *
+     * @param userId the ID of the user whose profile is to be retrieved
+     * @return a ResponseEntity containing the UserDto
+     * with the user's profile details
+     */
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
 }
