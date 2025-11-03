@@ -5,7 +5,7 @@ import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
-import com.platform.user_service.services.IUserService;
+import com.platform.user_service.services.user.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

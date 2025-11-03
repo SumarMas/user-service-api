@@ -1,4 +1,4 @@
-package com.platform.user_service.services.impl;
+package com.platform.user_service.services.user.impl;
 
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.RegisterAuthDto;
@@ -11,7 +11,7 @@ import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.enums.UserStatus;
 import com.platform.user_service.repositories.UserRepository;
 import com.platform.user_service.restClients.IAuthRestClient;
-import com.platform.user_service.services.IRegisterUserService;
+import com.platform.user_service.services.user.IRegisterUserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,14 +1,14 @@
-package com.platform.user_service.services.impl;
+package com.platform.user_service.services.user.impl;
 
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
-import com.platform.user_service.services.IGetUserService;
-import com.platform.user_service.services.IRegisterUserService;
-import com.platform.user_service.services.IUpdateUserService;
-import com.platform.user_service.services.IUserService;
+import com.platform.user_service.services.user.IGetUserService;
+import com.platform.user_service.services.user.IRegisterUserService;
+import com.platform.user_service.services.user.IUpdateUserService;
+import com.platform.user_service.services.user.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

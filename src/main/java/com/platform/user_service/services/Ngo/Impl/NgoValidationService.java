@@ -8,7 +8,7 @@ import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.repositories.NgoDocumentRepository;
 import com.platform.user_service.repositories.NgoRepository;
-import com.platform.user_service.services.IContextService;
+import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.Ngo.INgoValidationService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
