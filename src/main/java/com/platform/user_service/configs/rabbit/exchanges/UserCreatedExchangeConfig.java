@@ -13,7 +13,7 @@ public class UserCreatedExchangeConfig extends ExchangeAbstractConfig {
      *                          injected from application properties
      */
     public UserCreatedExchangeConfig(
-            @Value("${exchange.user-created}") String exchangeNameParam) {
+            @Value("${queues.user-created.exchange}") String exchangeNameParam) {
         super(exchangeNameParam);
     }
 

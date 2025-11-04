@@ -60,5 +60,6 @@ pool:
   auth:
     url: ${AUTH_SERVICE_URL:http://localhost:9080/auth}
 
-exchange:
-  user-created: ${EXCHANGE_USER_CREATED:user.created}
+queues:
+  user-created:
+    exchange: ${EXCHANGE_USER_CREATED:user.created}
