@@ -1,4 +1,4 @@
-package com.platform.user_service.services;
+package com.platform.user_service.services.user;
 
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
@@ -44,4 +44,11 @@ public interface IUserService {
      * @return a UserDto containing the user's profile details
      */
     UserDto getMyProfile();
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    UserDto getUserById(UUID userId);
 }

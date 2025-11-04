@@ -5,7 +5,7 @@ import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
-import com.platform.user_service.services.IUserService;
+import com.platform.user_service.services.user.IUserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -76,5 +76,17 @@ public class UserController {
     @GetMapping("/my-profile")
     public ResponseEntity<UserDto> getMyProfile() {
         return ResponseEntity.ok(userService.getMyProfile());
+    }
+
+    /**
+     * Retrieves the profile information of a user by their ID.
+     *
+     * @param userId the ID of the user whose profile is to be retrieved
+     * @return a ResponseEntity containing the UserDto
+     * with the user's profile details
+     */
+    @GetMapping("/{userId}/profile")
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") UUID userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
     }
 }

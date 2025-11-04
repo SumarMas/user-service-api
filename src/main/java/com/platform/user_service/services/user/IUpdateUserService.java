@@ -1,4 +1,4 @@
-package com.platform.user_service.services;
+package com.platform.user_service.services.user;
 
 import com.platform.user_service.dtos.request.UserUpdateDto;
 import com.platform.user_service.enums.UserRole;

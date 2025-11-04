@@ -1,4 +1,4 @@
-package com.platform.user_service.services;
+package com.platform.user_service.services.user;
 
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;

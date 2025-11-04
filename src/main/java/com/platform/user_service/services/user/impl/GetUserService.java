@@ -1,12 +1,12 @@
-package com.platform.user_service.services.impl;
+package com.platform.user_service.services.user.impl;
 
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.repositories.UserRepository;
-import com.platform.user_service.services.IContextService;
-import com.platform.user_service.services.IGetUserService;
+import com.platform.user_service.services.user.IContextService;
+import com.platform.user_service.services.user.IGetUserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +55,19 @@ public class GetUserService implements IGetUserService {
     public UserDto getMyProfile() {
         LOG.trace("getMyProfile()");
         UUID userID = getCurrentUserId();
-        UserEntity userEntity = getUserEntityById(userID);
-        LOG.trace("Building UserDto");
+        return getUserById(userID);
+    }
+
+    /**
+     * Retrieves user information by user ID.
+     *
+     * @param userId the unique identifier of the user
+     * @return a UserDto containing the user's details
+     */
+    @Override
+    public UserDto getUserById(UUID userId) {
+        LOG.trace("getUserById()");
+        UserEntity userEntity = getUserEntityById(userId);
         return buildUserDto(userEntity);
     }
 

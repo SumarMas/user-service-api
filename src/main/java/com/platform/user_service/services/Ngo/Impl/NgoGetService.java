@@ -10,7 +10,7 @@ import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.repositories.NgoRepository;
-import com.platform.user_service.services.IContextService;
+import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.Ngo.INgoGetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;

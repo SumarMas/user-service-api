@@ -1,7 +1,8 @@
-package com.platform.user_service.services.impl;
+package com.platform.user_service.services.user.impl;
 
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.RegisterAuthDto;
+import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.request.UserRegisterDto;
 import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.entities.UserEntity;
@@ -11,7 +12,8 @@ import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.enums.UserStatus;
 import com.platform.user_service.repositories.UserRepository;
 import com.platform.user_service.restClients.IAuthRestClient;
-import com.platform.user_service.services.IRegisterUserService;
+import com.platform.user_service.services.user.INewUserPublishEventService;
+import com.platform.user_service.services.user.IRegisterUserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,8 @@ public class RegisterUserService implements IRegisterUserService {
     private final UserRepository userRepository;
     /** The default role assigned to newly registered users. */
     private static final  UserRole DEFAULT_ROLE = UserRole.DONOR;
+    /** Service for publishing events when a new user is created. */
+    private final INewUserPublishEventService newUserPublishEventService;
 
     /**
      * Registers a new user based on the provided registration details.
@@ -70,6 +74,7 @@ public class RegisterUserService implements IRegisterUserService {
             LOGGER.error("In registerUser method, token is null; rolling back user creation");
             throw new CustomException("Error registering user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        sendEventUserCreated(userEntity);
         return token;
     }
 
@@ -136,5 +141,16 @@ public class RegisterUserService implements IRegisterUserService {
             LOGGER.warn("Invalid profileFileId format: {} | Error: {}", profileFileId, ex.getMessage());
             throw new CustomException("Invalid profileFileId", HttpStatus.BAD_REQUEST, ex);
         }
+    }
+
+    private void sendEventUserCreated(UserEntity userEntity) {
+        LOGGER.trace("In sendEventUserCreated method");
+        UserDto userDto = UserDto.builder()
+                .id(userEntity.getId().toString())
+                .firstName(userEntity.getFirstName())
+                .lastName(userEntity.getLastName())
+                .email(userEntity.getEmail())
+                .build();
+        newUserPublishEventService.publishNewUserEvent(userDto);
     }
 }

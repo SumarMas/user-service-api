@@ -1,8 +1,8 @@
-package com.platform.user_service.services.impl;
+package com.platform.user_service.services.user.impl;
 
 import com.platform.user_service.context.RequestContext;
 import com.platform.user_service.enums.UserRole;
-import com.platform.user_service.services.IContextService;
+import com.platform.user_service.services.user.IContextService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
