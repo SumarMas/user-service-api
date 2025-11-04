@@ -27,7 +27,7 @@ public abstract class ExchangeAbstractConfig {
      *
      * @return the FanoutExchange bean
      */
-    @Bean(name = "#{exchangeName + '_Exchange'}")
+    @Bean(name = "#{T(java.lang.String).format('%sExchange', exchangeName)}")
     public FanoutExchange createExchange() {
         return new FanoutExchange(exchangeName, true, false);
     }
