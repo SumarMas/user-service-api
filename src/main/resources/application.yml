@@ -63,3 +63,5 @@ pool:
 queues:
   user-created:
     exchange: ${EXCHANGE_USER_CREATED:user.created}
+  ngo-status:
+    exchange: ${EXCHANGE_NGO_STATUS:ngo.status}

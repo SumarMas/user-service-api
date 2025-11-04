@@ -11,6 +11,7 @@ import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.NgoRepository;
+import com.platform.user_service.services.Ngo.INgoStatusPublishEventService;
 import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.user.IUpdateUserService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
@@ -40,6 +41,8 @@ public class NgoRegisterService implements INgoRegisterService {
     private final IUpdateUserService updateUserService;
     /** Service for context-related operations. */
     private final IContextService contextService;
+    /** Service for publishing NGO status events. */
+    private final INgoStatusPublishEventService publishEventService;
     /**
      * Method to register a new NGO.
      *
@@ -61,6 +64,7 @@ public class NgoRegisterService implements INgoRegisterService {
             ngoRepository.save(ngoEntity);
             addRolNgoToUser(userId);
             LOGGER.info("NGO with ID {} successfully registered by user {}", ngoEntity.getId(), userId);
+            publishNgoStatusEvent(ngoEntity);
         } catch (DataAccessException ex) {
             LOGGER.error("Database error occurred while registering NGO: {}", ex.getMessage());
             throw new CustomException("An error occurred when try save NGO", HttpStatus.INTERNAL_SERVER_ERROR, ex);
@@ -149,5 +153,10 @@ public class NgoRegisterService implements INgoRegisterService {
             LOGGER.warn("Invalid UUID format for {}: {}", fieldName, id);
             throw new CustomException("Invalid UUID format for " + fieldName, HttpStatus.BAD_REQUEST, e);
         }
+    }
+
+    private void publishNgoStatusEvent(NgoEntity ngoEntity) {
+        publishEventService.publishNgoStatusEvent(ngoEntity.getUserIdCreator().getId(),
+                ngoEntity.getName(), ngoEntity.getVerificationStatus(), "");
     }
 }
