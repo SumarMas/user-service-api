@@ -9,7 +9,9 @@ import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConversionException;
 import org.springframework.stereotype.Component;
-
+/**
+ * Producer class for publishing new user events to RabbitMQ.
+ */
 @Component
 @RequiredArgsConstructor
 @Slf4j
