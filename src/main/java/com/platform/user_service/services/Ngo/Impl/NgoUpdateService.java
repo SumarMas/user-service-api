@@ -9,6 +9,7 @@ import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.repositories.NgoRepository;
+import com.platform.user_service.services.Ngo.INgoStatusPublishEventService;
 import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.Ngo.INgoUpdateService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +36,8 @@ public class NgoUpdateService implements INgoUpdateService {
     private final NgoRepository ngoRepository;
     /** Service for managing context-related operations. */
     private final IContextService contextService;
+    /** Service for publishing NGO status events. */
+    private final INgoStatusPublishEventService publishEventService;
 
     /**
      * Updates the information of an existing NGO.
@@ -42,11 +46,13 @@ public class NgoUpdateService implements INgoUpdateService {
      * @param request The DTO containing the updated NGO information.
      */
     @Override
+    @Transactional
     public void updateNgo(UUID ngoId, NgoUpdateRequestDto request) {
         LOG.trace("In updateNgo");
         UUID userId = getCurrentUserId();
         NgoEntity ngo = getNgoEntity(ngoId);
         validateUserAuthorization(ngo.getUserIdCreator().getId());
+        boolean sendNotification = false;
         boolean hasChanges = false;
         if (request.getName() != null && !request.getName().equals(ngo.getName())) {
             ngo.setName(request.getName());
@@ -65,6 +71,7 @@ public class NgoUpdateService implements INgoUpdateService {
             hasChanges = true;
         }
         if (updateDocuments(ngo, request.getDocumentsId(), userId)) {
+            sendNotification = true;
             ngo.setVerificationStatus(NgoStatus.PENDING);
             hasChanges = true;
         }
@@ -78,6 +85,9 @@ public class NgoUpdateService implements INgoUpdateService {
         } catch (DataAccessException ex) {
             LOG.error("Database error while updating NGO with ID {}: {}", ngoId, ex.getMessage());
             throw new CustomException("An error occurred while updating NGO.", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+        if (sendNotification) {
+            publishNgoStatusEvent(ngo);
         }
     }
 
@@ -181,5 +191,10 @@ public class NgoUpdateService implements INgoUpdateService {
             LOG.warn("Invalid UUID format for {}: {}", fieldName, id);
             throw new CustomException("Invalid UUID format for " + fieldName, HttpStatus.BAD_REQUEST, e);
         }
+    }
+
+    private void publishNgoStatusEvent(NgoEntity ngoEntity) {
+        publishEventService.publishNgoStatusEvent(ngoEntity.getUserIdCreator().getId(),
+                ngoEntity.getName(), ngoEntity.getVerificationStatus(), "");
     }
 }

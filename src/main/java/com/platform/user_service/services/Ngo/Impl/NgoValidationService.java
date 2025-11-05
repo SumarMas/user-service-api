@@ -8,6 +8,7 @@ import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.repositories.NgoDocumentRepository;
 import com.platform.user_service.repositories.NgoRepository;
+import com.platform.user_service.services.Ngo.INgoStatusPublishEventService;
 import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.Ngo.INgoValidationService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class NgoValidationService implements INgoValidationService {
     private final NgoDocumentRepository ngoDocumentRepository;
     /** Service for managing context-related operations. */
     private final IContextService contextService;
+    /** Service for publishing NGO status events. */
+    private final INgoStatusPublishEventService publishEventService;
     /**
      * Validates an NGO based on the provided request data.
      *
@@ -61,6 +64,7 @@ public class NgoValidationService implements INgoValidationService {
         ngo.setLastUpdatedUser(adminId);
         ngoRepository.save(ngo);
         ngoDocumentRepository.saveAll(documents);
+        publishNgoStatusEvent(ngo, requestDto.getComment());
         LOG.info("NGO with id {} validated successfully", ngoId);
     }
 
@@ -96,5 +100,10 @@ public class NgoValidationService implements INgoValidationService {
             throw  new CustomException("Current user ID not found", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return  userId;
+    }
+
+    private void publishNgoStatusEvent(NgoEntity ngoEntity, String comment) {
+        publishEventService.publishNgoStatusEvent(ngoEntity.getUserIdCreator().getId(),
+                ngoEntity.getName(), ngoEntity.getVerificationStatus(), comment);
     }
 }
