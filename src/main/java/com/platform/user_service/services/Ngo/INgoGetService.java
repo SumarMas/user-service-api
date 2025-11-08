@@ -39,4 +39,10 @@ public interface INgoGetService {
      * @return a list of NgoDto representing the pending NGOs
      */
     List<NgoDto> getPendingNgos();
+    /**
+     * Retrieves a list of all NGOs.
+     *
+     * @return a list of NgoDto representing all NGOs
+     */
+    List<NgoDto> getAllNgos();
 }
