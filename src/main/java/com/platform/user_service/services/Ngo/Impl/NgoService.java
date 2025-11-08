@@ -114,4 +114,15 @@ public class NgoService implements INgoService {
         LOG.trace("In getMyNgo");
         return ngoGetService.getMyNgo();
     }
+
+    /**
+     * Retrieves a list of all NGOs.
+     *
+     * @return a list of NgoDto representing all NGOs
+     */
+    @Override
+    public List<NgoDto> getAllNgos() {
+        LOG.trace("In getAllNgos");
+        return ngoGetService.getAllNgos();
+    }
 }

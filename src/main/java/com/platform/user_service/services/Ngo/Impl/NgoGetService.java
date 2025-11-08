@@ -39,7 +39,7 @@ public class NgoGetService implements INgoGetService {
     @Override
     public List<NgoDto> getAllApproveNgos() {
         LOG.trace("In NgoGetService.getAllApproveNgos()");
-        List<NgoEntity> ngos = findAllNgos().stream()
+        List<NgoEntity> ngos = findAllNgosEnable().stream()
                 .filter(ngo -> ngo.getVerificationStatus().equals(NgoStatus.VERIFIED)).toList();
         return ngos.stream().map(this::mapNgoPendingDto).toList();
     }
@@ -83,6 +83,18 @@ public class NgoGetService implements INgoGetService {
         return ngos.stream().map(this::mapNgoPendingDto).toList();
     }
 
+    /**
+     * Retrieves a list of all NGOs.
+     *
+     * @return a list of NgoDto representing all NGOs
+     */
+    @Override
+    public List<NgoDto> getAllNgos() {
+        LOG.trace("getAllNgos");
+        List<NgoEntity> ngos = findAllNgos();
+        return ngos.stream().map(this::mapNgoPendingDto).toList();
+    }
+
     private void checkAdmin() {
         if (!contextService.isAdmin()) {
             LOG.warn("User is not admin");
@@ -105,9 +117,17 @@ public class NgoGetService implements INgoGetService {
             return List.of();
         }
     }
-    private List<NgoEntity> findAllNgos() {
+    private List<NgoEntity> findAllNgosEnable() {
         try {
             return ngoRepository.findAllByEnabledIsTrue();
+        } catch (DataAccessException ex) {
+            LOG.error("Database access error while retrieving all NGOs Enable: {}", ex.getMessage());
+            return List.of();
+        }
+    }
+    private List<NgoEntity> findAllNgos() {
+        try {
+            return ngoRepository.findAll();
         } catch (DataAccessException ex) {
             LOG.error("Database access error while retrieving all NGOs: {}", ex.getMessage());
             return List.of();

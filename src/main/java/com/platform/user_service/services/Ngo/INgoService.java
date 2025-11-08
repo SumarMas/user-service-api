@@ -64,4 +64,11 @@ public interface INgoService {
      * @return the NgoDto representing the user's NGO details
      */
     NgoDto getMyNgo();
+
+    /**
+     * Retrieves a list of all NGOs.
+     *
+     * @return a list of NgoDto representing all NGOs
+     */
+    List<NgoDto> getAllNgos();
 }

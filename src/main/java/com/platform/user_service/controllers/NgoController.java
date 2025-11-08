@@ -119,4 +119,16 @@ public class NgoController {
         NgoDto ngoDto = ngoService.getMyNgo();
         return ResponseEntity.ok(ngoDto);
     }
+
+    /**
+     * Retrieves a list of all NGOs.
+     *
+     * @return a ResponseEntity containing a list of all NGOs
+     * with HTTP status 200 (OK)
+     */
+    @GetMapping("/all")
+    public ResponseEntity<List<NgoDto>> getAllNgos() {
+        List<NgoDto> ngoDtos = ngoService.getAllNgos();
+        return ResponseEntity.ok(ngoDtos);
+    }
 }
