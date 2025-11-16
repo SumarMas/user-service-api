@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -88,5 +89,16 @@ public class UserController {
     @GetMapping("/{userId}/profile")
     public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") UUID userId) {
         return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
+    /**
+     * Retrieves a list of all admin users.
+     *
+     * @return a ResponseEntity containing a list of UserDto
+     * representing all admin users
+     */
+    @GetMapping("/admins")
+    public ResponseEntity<List<UserDto>> getAllAdmins() {
+        return ResponseEntity.ok(userService.getAdminsUsers());
     }
 }

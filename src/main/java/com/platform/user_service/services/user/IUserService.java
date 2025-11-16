@@ -7,6 +7,7 @@ import com.platform.user_service.dtos.response.TokenResponseDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -51,4 +52,11 @@ public interface IUserService {
      * @return a UserDto containing the user's details
      */
     UserDto getUserById(UUID userId);
+
+    /**
+     * Retrieves a list of users with admin roles.
+     *
+     * @return a list of UserDto containing admin users' details
+     */
+    List<UserDto> getAdminsUsers();
 }

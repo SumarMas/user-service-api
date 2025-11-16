@@ -4,6 +4,7 @@ import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
 import com.platform.user_service.entities.UserEntity;
+import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.UserRepository;
 import com.platform.user_service.services.user.IContextService;
 import com.platform.user_service.services.user.IGetUserService;
@@ -14,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,11 +26,17 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class GetUserService implements IGetUserService {
-    /** Logger for logging information and errors. */
+    /**
+     * Logger for logging information and errors.
+     */
     private static final Logger LOG = LoggerFactory.getLogger(GetUserService.class);
-    /** Repository for accessing user data. */
+    /**
+     * Repository for accessing user data.
+     */
     private final UserRepository userRepository;
-    /** Service for context-related operations. */
+    /**
+     * Service for context-related operations.
+     */
     private final IContextService contextService;
 
     /**
@@ -71,6 +79,18 @@ public class GetUserService implements IGetUserService {
         return buildUserDto(userEntity);
     }
 
+    /**
+     * Retrieves a list of users with admin roles.
+     *
+     * @return a list of UserDto containing admin users' details
+     */
+    @Override
+    public List<UserDto> getAdminsUsers() {
+        return getUsersAdmin().stream()
+                .map(this::buildUserDto)
+                .toList();
+    }
+
     private UUID validateUserId(String userId) {
         try {
             return UUID.fromString(userId);
@@ -81,7 +101,7 @@ public class GetUserService implements IGetUserService {
     }
 
     private UUID getCurrentUserId() {
-        UUID userId =  contextService.getUserId();
+        UUID userId = contextService.getUserId();
         if (userId == null) {
             LOG.warn("User ID not found in context");
             throw new CustomException("User ID not found in context", HttpStatus.UNAUTHORIZED);
@@ -104,6 +124,17 @@ public class GetUserService implements IGetUserService {
             LOG.error("Database access error while retrieving user by ID: {}, ERROR: {}",
                     userUUID.toString(), ex.getMessage());
             throw new CustomException("Error retrieving user data", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+
+    private List<UserEntity> getUsersAdmin() {
+        LOG.trace("Retrieving admin users");
+        try {
+            return userRepository.findAllByUserRolesIs(UserRole.ADMIN);
+        } catch (DataAccessException ex) {
+            LOG.error("Database access error while retrieving admin users, ERROR: {}",
+                    ex.getMessage());
+            return List.of();
         }
     }
 
