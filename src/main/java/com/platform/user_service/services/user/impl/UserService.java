@@ -12,6 +12,7 @@ import com.platform.user_service.services.user.IUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -79,5 +80,15 @@ public class UserService implements IUserService {
     @Override
     public UserDto getUserById(UUID userId) {
         return getUserService.getUserById(userId);
+    }
+
+    /**
+     * Retrieves a list of users with admin roles.
+     *
+     * @return a list of UserDto containing admin users' details
+     */
+    @Override
+    public List<UserDto> getAdminsUsers() {
+        return getUserService.getAdminsUsers();
     }
 }
