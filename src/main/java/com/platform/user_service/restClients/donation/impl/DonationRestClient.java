@@ -7,7 +7,6 @@ import com.platform.user_service.dtos.common.ErrorApi;
 import com.platform.user_service.dtos.donation.DonationsDto;
 import com.platform.user_service.enums.DonationStatus;
 import com.platform.user_service.restClients.donation.IDonationRestClient;
-import jakarta.ws.rs.core.UriBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

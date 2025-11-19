@@ -161,7 +161,7 @@ public class NgoRemoveService implements INgoRemoveService {
             ngoRepository.save(ngoEntity);
         } catch (DataAccessException ex) {
             log.error("Error deactivating NGO with ID: {}", ngoEntity.getId(), ex);
-            throw new CustomException("Error deactivating NGO", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("Error deactivating NGO", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 }

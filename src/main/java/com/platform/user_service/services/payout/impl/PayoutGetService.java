@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-
+/**
+ * Service implementation for retrieving payout requests.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor

@@ -21,7 +21,10 @@ import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
-
+/**
+ * Implementation of the IPayoutRestClient interface
+ * for interacting with the Payout service.
+ */
 @Service
 @Slf4j
 @SuppressWarnings("PMD.LooseCoupling")

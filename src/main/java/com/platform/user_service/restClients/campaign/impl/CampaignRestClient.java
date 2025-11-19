@@ -7,7 +7,6 @@ import com.platform.user_service.dtos.campaign.CampaignDto;
 import com.platform.user_service.dtos.common.ErrorApi;
 import com.platform.user_service.enums.CampaignState;
 import com.platform.user_service.restClients.campaign.ICampaignRestClient;
-import jakarta.ws.rs.core.UriBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
