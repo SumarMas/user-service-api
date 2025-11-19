@@ -3,6 +3,7 @@ package com.platform.user_service.services.user.impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
+import com.platform.user_service.entities.AuditEntity;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.UserRepository;
@@ -158,6 +159,7 @@ public class GetUserService implements IGetUserService {
                         ? userEntity.getProfileFileId().toString() : null)
                 .status(userEntity.getStatus().name())
                 .roles(userEntity.getUserRoles().stream()
+                        .filter(AuditEntity::getEnabled)
                         .map(role -> role.getRol().name())
                         .toList())
                 .build();

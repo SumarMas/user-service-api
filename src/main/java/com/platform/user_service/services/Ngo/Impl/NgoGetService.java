@@ -5,9 +5,11 @@ import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.dtos.common.NgoImageDto;
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.entities.AuditEntity;
+import com.platform.user_service.entities.NgoDocumentEntity;
 import com.platform.user_service.entities.NgoEntity;
 import com.platform.user_service.entities.NgoImageEntity;
 import com.platform.user_service.entities.UserEntity;
+import com.platform.user_service.enums.NgoDocumentStatus;
 import com.platform.user_service.enums.NgoStatus;
 import com.platform.user_service.repositories.NgoRepository;
 import com.platform.user_service.services.user.IContextService;
@@ -154,6 +156,7 @@ public class NgoGetService implements INgoGetService {
         }
     }
     private NgoDto mapNgoPendingDto(NgoEntity ngoEntity) {
+        String observation = "";
         if (ngoEntity == null) {
             return null;
         }
@@ -163,6 +166,14 @@ public class NgoGetService implements INgoGetService {
         if (ngoEntity.getNgoImages() == null) {
             ngoEntity.setNgoImages(List.of());
         }
+        if (ngoEntity.getVerificationStatus().equals(NgoStatus.DENIED)) {
+            observation = ngoEntity.getNgoDocuments().stream()
+                    .filter(doc -> doc.getStatus().equals(NgoDocumentStatus.REJECTED)
+                            && doc.getEnabled() && !doc.getAdminComment().isBlank())
+                    .map(NgoDocumentEntity::getAdminComment)
+                    .findFirst()
+                    .orElse("");
+        }
         return NgoDto.builder()
                 .id(ngoEntity.getId().toString())
                 .name(ngoEntity.getName())
@@ -171,6 +182,7 @@ public class NgoGetService implements INgoGetService {
                 .profileFileId(ngoEntity.getProfileFileId().toString())
                 .createdDateTime(ngoEntity.getCreatedDatetime())
                 .userCreator(mapUserCreator(ngoEntity.getUserIdCreator()))
+                .reasonDenied(observation)
                 .documentsId(ngoEntity.getNgoDocuments().stream()
                         .filter(AuditEntity::getEnabled)
                         .map(doc -> doc.getFileId().toString()).toList())
@@ -186,7 +198,7 @@ public class NgoGetService implements INgoGetService {
                 .firstName(userEntity.getFirstName())
                 .lastName(userEntity.getLastName())
                 .email(userEntity.getEmail())
-                .roles(userEntity.getUserRoles().stream().map(rol -> rol.getRol().name()).toList())
+                .roles(userEntity.getUserRoles().stream().filter(AuditEntity::getEnabled).map(rol -> rol.getRol().name()).toList())
                 .profileFileId(userEntity.getProfileFileId() != null ? userEntity.getProfileFileId().toString() : null)
                 .status(userEntity.getStatus().name())
                 .build();

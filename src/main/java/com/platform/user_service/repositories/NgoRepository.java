@@ -60,7 +60,8 @@ public interface NgoRepository extends JpaRepository<NgoEntity, UUID> {
      * @return an Optional containing the NgoEntity if found, or empty if not found
      */
     @Query("SELECT n FROM NgoEntity n "
-            + " WHERE n.userIdCreator.id = :userIdCreatorId")
+            + " WHERE n.userIdCreator.id = :userIdCreatorId"
+            + " AND n.enabled = true")
     Optional<NgoEntity> findByUserIdCreatorId(UUID userIdCreatorId);
 
     /**

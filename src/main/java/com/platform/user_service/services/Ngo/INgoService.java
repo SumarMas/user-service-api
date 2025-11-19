@@ -71,4 +71,11 @@ public interface INgoService {
      * @return a list of NgoDto representing all NGOs
      */
     List<NgoDto> getAllNgos();
+
+    /**
+     * Remove an NGO by its ID.
+     *
+     * @param ngoId the unique identifier of the NGO to be deleted
+     */
+    void removeNgo(UUID ngoId);
 }

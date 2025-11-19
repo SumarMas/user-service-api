@@ -25,4 +25,12 @@ public interface IUpdateUserService {
      * @param role The name of the role to be added to the user.
      */
     void addRoleToUser(UUID userId, UserRole role);
+
+    /**
+     * Removes a role from the user based on the provided user ID and role name.
+     *
+     * @param userId   The UUID of the user from whom the role will be removed.
+     * @param role The name of the role to be removed from the user.
+     */
+    void removeRoleFromUser(UUID userId, UserRole role);
 }

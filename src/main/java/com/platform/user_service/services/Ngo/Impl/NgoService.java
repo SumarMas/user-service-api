@@ -6,12 +6,13 @@ import com.platform.user_service.dtos.request.NgoValidationRequestDto;
 import com.platform.user_service.dtos.common.NgoDto;
 import com.platform.user_service.services.Ngo.INgoGetService;
 import com.platform.user_service.services.Ngo.INgoRegisterService;
+import com.platform.user_service.services.Ngo.INgoRemoveService;
 import com.platform.user_service.services.Ngo.INgoService;
 import com.platform.user_service.services.Ngo.INgoUpdateService;
 import com.platform.user_service.services.Ngo.INgoValidationService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,9 +24,8 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class NgoService implements INgoService {
-    /** Logger for logging information and errors. */
-    private static final Logger LOG = LoggerFactory.getLogger(NgoService.class);
     /** Service for handling NGO registration operations. */
     private final INgoRegisterService ngoRegisterService;
     /** Service for handling Get NGO operations. */
@@ -34,6 +34,8 @@ public class NgoService implements INgoService {
     private final INgoValidationService ngoValidationService;
     /** Service for handling NGO update operations. */
     private final INgoUpdateService ngoUpdateService;
+    /** Service for handling NGO removal operations. */
+    private final INgoRemoveService ngoRemoveService;
 
     /**
      * Method to register a new NGO.
@@ -42,7 +44,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public void registerNgo(NgoCreateRequestDto ngoCreateRequestDto) {
-        LOG.trace("In RegisterNgo");
+        log.trace("In RegisterNgo");
         ngoRegisterService.registerNgo(ngoCreateRequestDto);
     }
 
@@ -54,7 +56,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public void updateNgo(UUID ngoId, NgoUpdateRequestDto request) {
-        LOG.trace("In UpdateNgo");
+        log.trace("In UpdateNgo");
         ngoUpdateService.updateNgo(ngoId, request);
     }
 
@@ -65,7 +67,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public List<NgoDto> getPending() {
-        LOG.trace("In getPending");
+        log.trace("In getPending");
         return ngoGetService.getPendingNgos();
     }
 
@@ -77,7 +79,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public void validateNgo(UUID ngoId, NgoValidationRequestDto requestDto) {
-        LOG.trace("In validateNgo");
+        log.trace("In validateNgo");
         ngoValidationService.validateNgo(ngoId, requestDto);
     }
 
@@ -88,7 +90,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public List<NgoDto> getAllApproveNgos() {
-        LOG.trace("In getAllApproveNgos");
+        log.trace("In getAllApproveNgos");
         return ngoGetService.getAllApproveNgos();
     }
 
@@ -100,7 +102,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public NgoDto getNgoById(UUID ngoId) {
-        LOG.trace("In getNgoById");
+        log.trace("In getNgoById");
         return ngoGetService.getNgoById(ngoId);
     }
 
@@ -111,7 +113,7 @@ public class NgoService implements INgoService {
      */
     @Override
     public NgoDto getMyNgo() {
-        LOG.trace("In getMyNgo");
+        log.trace("In getMyNgo");
         return ngoGetService.getMyNgo();
     }
 
@@ -122,7 +124,18 @@ public class NgoService implements INgoService {
      */
     @Override
     public List<NgoDto> getAllNgos() {
-        LOG.trace("In getAllNgos");
+        log.trace("In getAllNgos");
         return ngoGetService.getAllNgos();
+    }
+
+    /**
+     * Remove an NGO by its ID.
+     *
+     * @param ngoId the unique identifier of the NGO to be deleted
+     */
+    @Override
+    public void removeNgo(UUID ngoId) {
+        log.trace("In deleteNgo");
+        ngoRemoveService.removeNgo(ngoId);
     }
 }

@@ -63,6 +63,12 @@ eureka:
 pool:
   auth:
     url: ${AUTH_SERVICE_URL:http://localhost:9080/auth}
+  campaign:
+    url: ${CAMPAIGN_SERVICE_URL:http://localhost:9080/campaigns}
+  donation:
+    url: ${DONATION_SERVICE_URL:http://localhost:9080/donations}
+  payout:
+    url: ${PAYOUT_SERVICE_URL:http://localhost:9080/payouts}
 
 queues:
   user-created:
