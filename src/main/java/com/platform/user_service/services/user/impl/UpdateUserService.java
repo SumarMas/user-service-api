@@ -83,16 +83,27 @@ public class UpdateUserService implements IUpdateUserService {
                     role.name(), userId, ex.getMessage());
             throw new CustomException("Error adding role to user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
-        if (userEntity.getUserRoles().stream().anyMatch(r -> r.getRol().equals(role))) {
+        UserRoleEntity previUserRoleEntity = userEntity.getUserRoles().stream()
+                .filter(r -> r.getRol().equals(role))
+                .findFirst()
+                .orElse(null);
+        if (previUserRoleEntity != null && Boolean.TRUE.equals(previUserRoleEntity.getEnabled())) {
             LOGGER.info("User ID: {} already has role '{}'. No action taken.", userId, role);
             return;
+        } else if (previUserRoleEntity != null) {
+            LOGGER.info("Re-enabling previously disabled role '{}' for user ID: {}.", role, userId);
+            previUserRoleEntity.setEnabled(Boolean.TRUE);
+            previUserRoleEntity.setLastUpdatedUser(getUserIdFromContext());
+        } else {
+            LOGGER.info("Creating new role '{}' for user ID: {}.", role, userId);
+            UUID createdBy = getUserIdFromContext();
+            userEntity.getUserRoles().add(UserRoleEntity.builder()
+                    .id(new UserRolId(userId, role))
+                    .createdUser(createdBy)
+                    .lastUpdatedUser(createdBy)
+                    .user(userEntity)
+                    .build());
         }
-        userEntity.getUserRoles().add(UserRoleEntity.builder()
-                .id(new UserRolId(userId, role))
-                .createdUser(userId)
-                .lastUpdatedUser(userId)
-                .user(userEntity)
-                .build());
         try {
             userRepository.save(userEntity);
             LOGGER.info("Role '{}' successfully added to user ID: {}.", role, userId);
@@ -100,6 +111,41 @@ public class UpdateUserService implements IUpdateUserService {
             LOGGER.error("Database access error while adding role '{}' to user ID: {}, ERROR: {}",
                     role, userId, ex.getMessage());
             throw new CustomException("Error adding role to user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+    }
+    /**
+     * Removes a role from the user based on the provided user ID and role name.
+     *
+     * @param userId   The UUID of the user from whom the role will be removed.
+     * @param role The name of the role to be removed from the user.
+     */
+    @Override
+    public void removeRoleFromUser(UUID userId, UserRole role) {
+        UserEntity userEntity;
+        try {
+            userEntity = getUserEntity(userId);
+        } catch (CustomException ex) {
+            LOGGER.error("Failed to delete role '{}' to user ID: {}. ERROR: {}",
+                    role.name(), userId, ex.getMessage());
+            throw new CustomException("Error deleted role to user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
+        }
+        UserRoleEntity userRoleEntity = userEntity.getUserRoles().stream()
+                .filter(r -> r.getRol().equals(role) && r.getEnabled().equals(true))
+                .findFirst()
+                .orElse(null);
+        if (userRoleEntity == null) {
+            LOGGER.info("User ID: {} does not have role '{}'. No action taken.", userId, role);
+            return;
+        }
+        userRoleEntity.setEnabled(false);
+        userRoleEntity.setLastUpdatedUser(getUserIdFromContext());
+        try {
+            userRepository.save(userEntity);
+            LOGGER.info("Role '{}' successfully removed from user ID: {}.", role, userId);
+        } catch (DataAccessException ex) {
+            LOGGER.error("Database access error while removing role '{}' from user ID: {}, ERROR: {}",
+                    role, userId, ex.getMessage());
+            throw new CustomException("Error removing role from user", HttpStatus.INTERNAL_SERVER_ERROR, ex);
         }
     }
 

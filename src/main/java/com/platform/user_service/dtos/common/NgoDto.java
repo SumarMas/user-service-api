@@ -67,6 +67,12 @@ public class NgoDto {
     private String status;
 
     /**
+     * The reason for denial if the NGO status is denied.
+     */
+    @JsonProperty("reasonDenied")
+    private String reasonDenied;
+
+    /**
      * The creation date and time of the NGO entry.
      */
     @JsonProperty("createdDateTime")

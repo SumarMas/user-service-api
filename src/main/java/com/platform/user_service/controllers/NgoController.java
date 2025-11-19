@@ -8,6 +8,7 @@ import com.platform.user_service.services.Ngo.INgoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -130,5 +131,18 @@ public class NgoController {
     public ResponseEntity<List<NgoDto>> getAllNgos() {
         List<NgoDto> ngoDtos = ngoService.getAllNgos();
         return ResponseEntity.ok(ngoDtos);
+    }
+
+    /**
+     * Deactivate an NGO by its ID.
+     *
+     * @param ngoId the ID of the NGO to be deactivated
+     * @return a ResponseEntity with HTTP status 200 (OK)
+     * if the deactivation is successful
+     */
+    @DeleteMapping("/{ngoId}/delete")
+    public ResponseEntity<Void> deleteNgo(@PathVariable UUID ngoId) {
+        ngoService.removeNgo(ngoId);
+        return ResponseEntity.ok().build();
     }
 }
