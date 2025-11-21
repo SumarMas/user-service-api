@@ -164,9 +164,9 @@ public class GetUserService implements IGetUserService {
                             .map(role -> role.getRol().name())
                             .toList())
                     .build();
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             LOG.error("Error building UserDto for user ID {}: {}", userEntity.getId(), e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new CustomException("Error building UserDto for user ID", HttpStatus.INTERNAL_SERVER_ERROR, e);
         }
     }
 }
