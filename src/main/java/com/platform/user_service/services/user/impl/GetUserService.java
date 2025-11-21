@@ -3,7 +3,6 @@ package com.platform.user_service.services.user.impl;
 import com.platform.user_service.controllers.manageExceptions.CustomException;
 import com.platform.user_service.dtos.common.UserDto;
 import com.platform.user_service.dtos.response.UserLoginResponseDto;
-import com.platform.user_service.entities.AuditEntity;
 import com.platform.user_service.entities.UserEntity;
 import com.platform.user_service.enums.UserRole;
 import com.platform.user_service.repositories.UserRepository;
@@ -17,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -150,18 +150,23 @@ public class GetUserService implements IGetUserService {
     }
 
     private UserDto buildUserDto(UserEntity userEntity) {
-        return UserDto.builder()
-                .id(userEntity.getId().toString())
-                .firstName(userEntity.getFirstName())
-                .lastName(userEntity.getLastName())
-                .email(userEntity.getEmail())
-                .profileFileId(userEntity.getProfileFileId() != null
-                        ? userEntity.getProfileFileId().toString() : null)
-                .status(userEntity.getStatus().name())
-                .roles(userEntity.getUserRoles().stream()
-                        .filter(AuditEntity::getEnabled)
-                        .map(role -> role.getRol().name())
-                        .toList())
-                .build();
+        try {
+            return UserDto.builder()
+                    .id(userEntity.getId().toString())
+                    .firstName(userEntity.getFirstName())
+                    .lastName(userEntity.getLastName())
+                    .email(userEntity.getEmail())
+                    .profileFileId(userEntity.getProfileFileId() != null
+                            ? userEntity.getProfileFileId().toString() : null)
+                    .status(userEntity.getStatus().name())
+                    .roles(userEntity.getUserRoles().stream()
+                            .filter(r -> Objects.isNull(r.getEnabled()) || r.getEnabled())
+                            .map(role -> role.getRol().name())
+                            .toList())
+                    .build();
+        } catch (Exception e) {
+            LOG.error("Error building UserDto for user ID {}: {}", userEntity.getId(), e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
     }
 }
